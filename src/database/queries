@@ -1,0 +1,11 @@
+use bitcoin;
+select count(*) from address;
+select sum(balance) from address;
+select * from address where balance = 0;
+select * from address order by balance asc limit 100;
+select address from address order by lastUpdate asc limit 100;
+select * from address where address = '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
+select * from address where meta != '';
+
+SELECT address, COUNT(*) FROM address GROUP BY address HAVING COUNT(*) > 0
+

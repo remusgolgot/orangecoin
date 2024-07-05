@@ -1,0 +1,27 @@
+STEPS:
+
+1. clean + commit repo
+2. build API Server
+3. build APIs
+4. process incoming blocks
+
+5. get historical price data
+6. build APIs around historical data
+
+MODEL
+1. first/last input/output date (dormancy)
+2. nr of unspent outputs
+
+APIS
+1. Build API Server
+2. Basic API set:
+   - getAddress
+   - getTopAddresses (max 50)
+   - countAddresses
+   - getMetaAddresses
+
+SERVICES
+1. process incoming blocks and update the db
+
+OTHER
+1. Sort out 35.7K addresses (pull addresses from addresses.txt to the DB)
