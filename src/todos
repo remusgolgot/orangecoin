@@ -1,12 +1,11 @@
 STEPS:
 
-1. clean + commit repo
-2. build API Server
-3. build APIs
-4. process incoming blocks
+1. build API Server
+2. build APIs
+3. process incoming blocks
 
-5. get historical price data
-6. build APIs around historical data
+4. get historical price data
+5. build APIs around historical data
 
 MODEL
 1. first/last input/output date (dormancy)

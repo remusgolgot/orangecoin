@@ -4,7 +4,7 @@ import processors.AddressProcessor;
 
 public class Main {
 
-    static String s = "1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP";
+    static String s = "32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo";
 
     public static void main(String[] args) {
         AddressProcessor addressProcessor = new AddressProcessor();
@@ -21,18 +21,19 @@ public class Main {
     }
 
 /*
-Number of addresses : 10729
-Total               : 11217724.63364196
-Total spent < 10%   :  8270632.07076279
-Total unspent       :  7662395.60449751
+Number of addresses : 10631
+Total               : 11152883.27853306
+Total spent < 10%   :  8234364.29705249
+Total unspent       :  7590922.52993899
  */
 
 /*
-1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP 69036.62664731 mr100
-32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo  5800.7580666 elSalvador
-1CounterpartyXXXXXXXXXXXXXXXUWLpVr  2130.99017004 burn
-1111111111111111111114oLvT2          605.3760422 burn
-1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa   100.05817448 genesis
-1BitcoinEaterAddressDontSendf59kuE    13.3548837 burn
+1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       71587.55503931 mr100
+32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        5811.75842701 elSalvador
+1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99018642 burn
+1111111111111111111114oLvT2                608.81575220 burn
+1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.09689797 genesis
+1BitcoinEaterAddressDontSendf59kuE          13.35488916 burn
+bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z   0.00612498 Germany
  */
 }
