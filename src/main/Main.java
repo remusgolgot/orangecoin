@@ -22,18 +22,18 @@ public class Main {
 
 /*
 Number of addresses : 10631
-Total               : 11152883.27853306
-Total spent < 10%   :  8234364.29705249
-Total unspent       :  7590922.52993899
+Total               : 11098101.50269585
+Total spent < 10%   :  8217594.32159942
+Total unspent       :  7563004.7266028
  */
 
 /*
 1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       71587.55503931 mr100
-32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        5811.75842701 elSalvador
+32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        5814.75843247 elSalvador
 1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99018642 burn
 1111111111111111111114oLvT2                608.81575220 burn
-1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.09689797 genesis
-1BitcoinEaterAddressDontSendf59kuE          13.35488916 burn
+1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.10061641 genesis
+1BitcoinEaterAddressDontSendf59kuE          13.35490008 burn
 bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z   0.00612498 Germany
  */
 }
