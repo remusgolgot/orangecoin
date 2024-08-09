@@ -13,7 +13,7 @@ public class MainDBUpdater {
 
     static BlockClient blockClient = new BlockchainClient();
     static final long timeout = 1200;
-    static final int LIMIT = 500;
+    static final int LIMIT = 10000;
     static final String MODE = "OLDEST";
 
     public static void main(String[] args) {
