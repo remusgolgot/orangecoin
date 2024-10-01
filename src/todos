@@ -1,6 +1,7 @@
 STEPS:
 
 1. build API Server
+    -> dao, dtos, services
 2. build APIs
 3. process incoming blocks
 
