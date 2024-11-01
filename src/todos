@@ -14,14 +14,12 @@ MODEL
 
 APIS
 1. Build API Server
-2. Basic API set:
-   - getAddress
-   - getTopAddresses (max 50)
-   - countAddresses
+   - getTopAddresses (max 200)
    - getMetaAddresses
+   - get addresses larger than x
 
 SERVICES
 1. process incoming blocks and update the db
 
 OTHER
-1. Sort out 35.7K addresses (pull addresses from addresses.txt to the DB)
+1. Sort out 35.5K addresses (pull addresses from addresses.txt to the DB)

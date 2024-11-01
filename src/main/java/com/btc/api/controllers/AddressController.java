@@ -19,12 +19,21 @@ public class AddressController {
 
     @GetMapping(value = "/list")
     public List<Address> list() {
-        System.out.println("here");
         return addressService.list();
+    }
+
+    @GetMapping(value = "/count")
+    public int count() {
+        return addressService.count();
     }
 
     @GetMapping(value = "/{address}")
     public Address getAddress(@PathVariable(value = "address") String address) {
         return addressService.getAddress(address);
+    }
+
+    @GetMapping(value = "/like/{chunk}")
+    public List<Address> getAddressesLike(@PathVariable(value = "chunk") String chunk) {
+        return addressService.getAddressesLike(chunk);
     }
 }

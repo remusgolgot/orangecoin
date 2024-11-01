@@ -17,11 +17,19 @@ public class AddressService {
     @Autowired
     protected GenericDAO genericDAO;
 
+    public int count() {
+        return addressDAO.count(Address.class);
+    }
+
     public List<Address> list() {
         return addressDAO.list(Address.class);
     }
 
     public Address getAddress(String address) {
         return addressDAO.getAddress(address);
+    }
+
+    public List<Address> getAddressesLike(String chunk) {
+        return addressDAO.getAddressesLike(chunk);
     }
 }

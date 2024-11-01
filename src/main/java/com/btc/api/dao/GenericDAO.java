@@ -1,5 +1,6 @@
 package com.btc.api.dao;
 
+import com.btc.api.model.Address;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -44,10 +45,7 @@ public class GenericDAO {
 
     @Transactional
     public <E> int count(Class<E> clazz) {
-        System.out.println(clazz.getSimpleName());
-        return em.createQuery(
-                        "SELECT COUNT(*) FROM " + clazz.getSimpleName())
-                .getFirstResult();
+        return list(clazz).size();
     }
 
     @Transactional
