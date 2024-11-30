@@ -1,5 +1,8 @@
 package com.btc.utils;
 
+import com.btc.model.Price;
+
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class Utils {
@@ -10,5 +13,6 @@ public class Utils {
         df.setMaximumFractionDigits(8);
         return df.format(balance);
     }
+
 
 }

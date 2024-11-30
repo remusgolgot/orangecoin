@@ -19,4 +19,22 @@ public class AddressDAO extends GenericDAO {
                         "SELECT a FROM Address a where address like '%" + chunk + "%'")
                 .getResultList();
     }
+
+    public List<Address> getAddressesTop(int number) {
+        return (List<Address>) em.createQuery(
+                        "SELECT a FROM Address a order by balance desc limit " + number)
+                .getResultList();
+    }
+
+    public List<Address> getAddressesMeta() {
+        return (List<Address>) em.createQuery(
+                        "SELECT a FROM Address a where meta != ''")
+                .getResultList();
+    }
+
+    public List<Address> getAddressesGreater(int amount) {
+        return (List<Address>) em.createQuery(
+                        "SELECT a FROM Address a where balance > " + amount + "00000000")
+                .getResultList();
+    }
 }

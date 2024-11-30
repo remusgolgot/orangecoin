@@ -1,7 +1,6 @@
 package com.btc.api.services;
 
 import com.btc.api.dao.AddressDAO;
-import com.btc.api.dao.GenericDAO;
 import com.btc.api.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +12,6 @@ public class AddressService {
 
     @Autowired
     protected AddressDAO addressDAO;
-
-    @Autowired
-    protected GenericDAO genericDAO;
 
     public int count() {
         return addressDAO.count(Address.class);
@@ -31,5 +27,17 @@ public class AddressService {
 
     public List<Address> getAddressesLike(String chunk) {
         return addressDAO.getAddressesLike(chunk);
+    }
+
+    public List<Address> getAddressesTop(int number) {
+        return addressDAO.getAddressesTop(number);
+    }
+
+    public List<Address> getAddressesMeta() {
+        return addressDAO.getAddressesMeta();
+    }
+
+    public List<Address> getAddressesGreater(int amount) {
+        return addressDAO.getAddressesGreater(amount);
     }
 }

@@ -1,25 +1,36 @@
-STEPS:
+1. INPUT/OUTPUT
 
-1. build API Server
-    -> dao, dtos, services
-2. build APIs
-3. process incoming blocks
+    A. DORMANCY : last interaction (diff to last input or output)
+    B. AGE : diff to first input
+    C. TOXICITY : diff to last output
 
-4. get historical price data
-5. build APIs around historical data
+2A. pretty print
+    - for address/{addresses} APIs
+    - for price stats APIs : add (M) to inform the marketcap and volume numbers is in millions
 
-MODEL
-1. first/last input/output date (dormancy)
-2. nr of unspent outputs
+2B. PRICES API
+- stats API to possibly include timeframe or date
+- if nothing :
+   - average price
+   - median price
+   - up days
+   - down days
+- if date:
+   - 20/50/100/200 DMA
+- if timeframe:
+   - average price
+   - median price
+   - up days
+   - down days
+   - biggest gain
+   - biggest draw-down
 
-APIS
-1. Build API Server
-   - getTopAddresses (max 200)
-   - getMetaAddresses
-   - get addresses larger than x
+- today's stats (similar to stats for day, with today's date (no API parameter))
+- prices older than 2013-04-28
+- 1 complex API (e.g. price variation (next day/week/month) following a 2% down day)
 
-SERVICES
-1. process incoming blocks and update the db
+3. Sort out remaining 35536 addresses (pull addresses from addresses.txt to the DB)
 
-OTHER
-1. Sort out 35.5K addresses (pull addresses from addresses.txt to the DB)
+4. Process incoming blocks
+
+5. Automated tests

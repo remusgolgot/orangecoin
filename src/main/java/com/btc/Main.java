@@ -1,12 +1,15 @@
 package com.btc;
 
 import com.btc.processors.AddressProcessor;
+import com.btc.services.CSVExportService;
+import com.btc.services.ExportService;
 
 public class Main {
 
-    static String s = "32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo";
+    static String s = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
 
     public static void main(String[] args) {
+
         AddressProcessor addressProcessor = new AddressProcessor();
         String[] split = s.split("\n");
         System.out.println("Processing " + split.length + " addresses ");
@@ -19,23 +22,26 @@ public class Main {
         System.out.println();
         addressProcessor.printMeta();
 
+        ExportService exportService = new CSVExportService();
+        exportService.export("out");
+
         long l = 1100000000000000L;
     }
 
 /*
-Number of addresses : 11098
-Total               : 11173397.88676329
-Total spent < 10%   :  8346652.27559443
-Total unspent       :  7513456.93413989
+Number of addresses : 11019
+Total               : 11149013.69339084
+Total spent < 10%   :  8267156.64763620
+Total unspent       :  7466129.62508814
  */
 
 /*
-1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       71889.94554327 mr100
-32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        5920.76647314 elSalvador
-1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99064552 burn
-1111111111111111111114oLvT2                644.43046520 burn
-1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.18877359 genesis
-1BitcoinEaterAddressDontSendf59kuE          13.35544881 burn
+1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       67899.93999806 mr100
+32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        5941.76657924 elSalvador
+1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99065152 burn
+1111111111111111111114oLvT2                649.44693569 burn
+1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.25663394 genesis
+1BitcoinEaterAddressDontSendf59kuE          13.35572589 burn
 bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z   0.00650284 Germany
  */
 }

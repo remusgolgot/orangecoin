@@ -5,6 +5,8 @@ import com.btc.client.BlockchainClient;
 import com.btc.database.Query;
 import com.btc.model.Address;
 import com.btc.processors.AddressProcessor;
+import com.btc.services.CSVExportService;
+import com.btc.services.ExportService;
 import com.btc.utils.Utils;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public class MainDBUpdater {
 
     static BlockClient blockClient = new BlockchainClient();
     static final long timeout = 1200;
-    static final int LIMIT = 5000;
+    static final int LIMIT = 1000;
     static final String MODE = "OLDEST";
 
     public static void main(String[] args) {
@@ -24,6 +26,9 @@ public class MainDBUpdater {
             for (String address : addresses) {
                 checkAddress(address);
             }
+            System.out.println("Exporting to csv");
+            ExportService exportService = new CSVExportService();
+            exportService.export("out");
 
         } catch (Exception e) {
             //

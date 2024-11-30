@@ -1,6 +1,7 @@
 package com.btc.database;
 
 import com.btc.model.Address;
+import com.btc.model.Price;
 import com.btc.utils.Utils;
 
 import java.sql.*;
@@ -10,6 +11,20 @@ import java.util.List;
 public class Query {
 
     private final String connectionUrl = "jdbc:mysql://localhost:3306/bitcoin?serverTimezone=UTC";
+
+    public void insertPrice(Price price) {
+
+        String sql = "insert into price (date, price, marketCap, volume)"
+                + " values (?, ?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = preparedStatementPrice(conn, sql, price)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+    }
 
     public int countAddresses() {
 
@@ -228,6 +243,16 @@ public class Query {
         preparedStmt.setDouble(3, address.getReceived());
         preparedStmt.setLong(4, address.getLastUpdate());
         preparedStmt.setString(5, address.getMeta());
+
+        return preparedStmt;
+    }
+
+    private PreparedStatement preparedStatementPrice(Connection connection, String sql, Price price) throws SQLException {
+        PreparedStatement preparedStmt = connection.prepareStatement(sql);
+        preparedStmt.setString(1, price.getDate());
+        preparedStmt.setDouble(2, price.getPrice());
+        preparedStmt.setDouble(3, price.getMarketCap());
+        preparedStmt.setDouble(4, price.getVolume());
 
         return preparedStmt;
     }
