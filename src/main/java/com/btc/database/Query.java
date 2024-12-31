@@ -14,8 +14,8 @@ public class Query {
 
     public void insertPrice(Price price) {
 
-        String sql = "insert into price (date, price, marketCap, volume)"
-                + " values (?, ?, ?, ?)";
+        String sql = "insert into price (date, price, marketCap, volume, variation, chg)"
+                + " values (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
              PreparedStatement preparedStmt = preparedStatementPrice(conn, sql, price)) {
@@ -253,6 +253,8 @@ public class Query {
         preparedStmt.setDouble(2, price.getPrice());
         preparedStmt.setDouble(3, price.getMarketCap());
         preparedStmt.setDouble(4, price.getVolume());
+        preparedStmt.setDouble(5, price.getVariation());
+        preparedStmt.setDouble(6, price.getChg());
 
         return preparedStmt;
     }

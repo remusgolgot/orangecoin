@@ -29,19 +29,20 @@ public class Main {
     }
 
 /*
-Number of addresses : 11019
-Total               : 11149013.69339084
-Total spent < 10%   :  8267156.64763620
-Total unspent       :  7466129.62508814
+Number of addresses : 11439
+Total               : 10474041.23659493
+Total spent < 10%   :  7653753.89794245
+Total unspent       :  6885981.45643243
  */
 
 /*
-1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       67899.93999806 mr100
-32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        5941.76657924 elSalvador
-1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99065152 burn
-1111111111111111111114oLvT2                649.44693569 burn
-1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.25663394 genesis
-1BitcoinEaterAddressDontSendf59kuE          13.35572589 burn
+1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       58219.41152847 mr100
+3D6kjgsypiAnGY7E1XHDQXapW4whUWaH1H       13797.77035568 Mara
+32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        6001.76660951 elSalvador
+1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99069234 burn
+1111111111111111111114oLvT2                663.37917235 burn
+1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.30271131 genesis
+1BitcoinEaterAddressDontSendf59kuE          13.35600303 burn
 bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z   0.00650284 Germany
  */
 }

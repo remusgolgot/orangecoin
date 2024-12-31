@@ -9,28 +9,20 @@
     - for price stats APIs : add (M) to inform the marketcap and volume numbers is in millions
 
 2B. PRICES API
-- stats API to possibly include timeframe or date
-- if nothing :
-   - average price
-   - median price
-   - up days
-   - down days
-- if date:
-   - 20/50/100/200 DMA
-- if timeframe:
-   - average price
-   - median price
-   - up days
-   - down days
-   - biggest gain
-   - biggest draw-down
+- check and overwrite when populating (no duplications)
+- if timeframe is provided:
+   - as from or from-to
 
-- today's stats (similar to stats for day, with today's date (no API parameter))
-- prices older than 2013-04-28
+- fetch prices older than 2013-04-28
 - 1 complex API (e.g. price variation (next day/week/month) following a 2% down day)
+- indicators : DMAs
 
 3. Sort out remaining 35536 addresses (pull addresses from addresses.txt to the DB)
 
 4. Process incoming blocks
 
 5. Automated tests
+
+6. Swagger API reference
+
+7. Time of day for bottom (depending on drawdown %, bounce from bottom)

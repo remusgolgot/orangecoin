@@ -19,7 +19,7 @@ public class PriceController {
     PriceService priceService;
 
     /**
-     * @return the price at the given date
+     * @return price stats
      */
     @GetMapping(value = "/stats")
     public ResponseModel<PriceStats> getStats() {

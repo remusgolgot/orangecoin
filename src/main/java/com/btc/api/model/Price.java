@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "price")
 public class Price {
-    // date,price,market_cap,total_volume
+    // date,price,market_cap,total_volume,variation
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +29,12 @@ public class Price {
 
     @Column(name = "volume")
     private Double volume;
+
+    @Column(name = "variation")
+    private Double variation;
+
+    @Column(name = "chg")
+    private Double chg;
 
     public String getDate() {
         return date;
@@ -60,5 +66,39 @@ public class Price {
 
     public void setVolume(Double volume) {
         this.volume = volume;
+    }
+
+    public Double getVariation() {
+        return variation;
+    }
+
+    public void setVariation(Double variation) {
+        this.variation = variation;
+    }
+
+    public Double getChg() {
+        return chg;
+    }
+
+    public void setChg(Double chg) {
+        this.chg = chg;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Price{" +
+                "date='" + date.split(" ")[0] + '\'' +
+                ", price=" + price +
+                ", variation=" + variation +
+                ", chg=" + chg +
+                '}';
     }
 }

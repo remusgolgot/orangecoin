@@ -5,7 +5,6 @@ import com.btc.model.Price;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.text.DecimalFormat;
 
 public class MainPriceUpdater {
 
@@ -13,21 +12,29 @@ public class MainPriceUpdater {
         BufferedReader reader;
         System.out.println("Updating Prices Table ...");
         try {
-            reader = new BufferedReader(new FileReader("C:\\Users\\sumer\\code\\orangecoin\\other\\btc-usd-max.csv"));
+            reader = new BufferedReader(new FileReader("C:\\Users\\sumer\\code\\orangecoin\\other\\prices.csv"));
             String line = reader.readLine();
-
+            Double previousPrice = 0.0;
             while (line != null) {
                 System.out.println(line);
                 // read next line
                 line = reader.readLine();
                 if (line != null) {
                     String[] lineElements = line.split(",");
+                    double priceValue = Double.parseDouble(lineElements[1]);
+                    if (previousPrice == 0.0) {
+                        previousPrice = priceValue;
+                    }
                     Price price = new Price(lineElements[0],
-                            Math.round(Double.parseDouble(lineElements[1]) * 100.0) / 100.0, // 2 decimals only
+                            Math.round(priceValue * 100.0) / 100.0, // 2 decimals only
                             Math.round(Double.parseDouble(lineElements[2]) / 1000000 * 100.0) / 100.0, // 2 decimals only
-                            Math.round(Double.parseDouble(lineElements[3]) / 1000000 * 100.0) / 100.0); // 2 decimals only
+                            Math.round(Double.parseDouble(lineElements[3]) / 1000000 * 100.0) / 100.0,
+                            (double) Math.round((priceValue - previousPrice) * 100.0) / 100.0,
+                            Math.round(((priceValue / previousPrice) - 1) * 100 * 100.0) / 100.0
+                    );
                     Query query = new Query();
                     query.insertPrice(price);
+                    previousPrice = priceValue;
                 }
             }
 

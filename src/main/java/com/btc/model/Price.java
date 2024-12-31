@@ -5,12 +5,16 @@ public class Price {
     Double price;
     Double marketCap;
     Double volume;
+    Double variation;
+    Double chg;
 
-    public Price(String date, Double price, Double marketCap, Double volume) {
+    public Price(String date, Double price, Double marketCap, Double volume, Double variation, Double chg) {
         this.date = date;
         this.price = price;
         this.marketCap = marketCap;
         this.volume = volume;
+        this.variation = variation;
+        this.chg = chg;
     }
 
     public String getDate() {
@@ -43,5 +47,21 @@ public class Price {
 
     public void setVolume(Double volume) {
         this.volume = volume;
+    }
+
+    public Double getVariation() {
+        return variation;
+    }
+
+    public void setVariation(Double variation) {
+        this.variation = variation;
+    }
+
+    public Double getChg() {
+        return chg;
+    }
+
+    public void setChg(Double chg) {
+        this.chg = chg;
     }
 }

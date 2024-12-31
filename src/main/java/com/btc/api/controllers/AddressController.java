@@ -34,7 +34,6 @@ public class AddressController {
 
     /**
      *
-     * @param address
      * @return the information related to the given the address
      */
     @GetMapping(value = "/{address}")
@@ -45,7 +44,6 @@ public class AddressController {
 
     /**
      *
-     * @param chunk
      * @return all addresses that contain the chunk (as a string) in their name
      */
     @GetMapping(value = "/like/{chunk}")
@@ -74,7 +72,6 @@ public class AddressController {
     }
 
     /**
-     * @param number
      * @return top addresses (number determines how many results)
      */
     @GetMapping(value = "/top/{number}")
@@ -84,7 +81,6 @@ public class AddressController {
     }
 
     /**
-     * @param amount
      * @return the addresses with a balance higher than the given amount
      */
     @GetMapping(value = "/greater/{amount}")
