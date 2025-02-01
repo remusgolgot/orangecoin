@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AddressService {
+public class AddressService implements Cloneable {
 
     @Autowired
     protected AddressDAO addressDAO;

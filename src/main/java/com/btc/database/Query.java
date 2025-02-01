@@ -66,7 +66,7 @@ public class Query {
                     }
                     if (i == 2 || i == 3) {
                         Double d = rs.getDouble(i);
-                        row.append(Utils.prettyBalance(d));
+                        row.append(d);
                     }
                     if (i == 5) {
                         long l = rs.getLong(i);
@@ -156,7 +156,7 @@ public class Query {
     }
 
     public List<String> getMetaTagAddresses() {
-        String query = "select * from address where meta != '' order by balance desc";
+        String query = "select * from address where meta != '' order by meta desc";
         List<String> list = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");

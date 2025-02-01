@@ -9,12 +9,15 @@ import java.io.FileReader;
 public class MainPriceUpdater {
 
     public static void main(String[] args) {
+
         BufferedReader reader;
-        System.out.println("Updating Prices Table ...");
+        System.out.println("Updating Prices ...");
+        Query query = new Query();
+        String from = "2025-01-29";
         try {
             reader = new BufferedReader(new FileReader("C:\\Users\\sumer\\code\\orangecoin\\other\\prices.csv"));
             String line = reader.readLine();
-            Double previousPrice = 0.0;
+            double previousPrice = 0.0;
             while (line != null) {
                 System.out.println(line);
                 // read next line
@@ -32,8 +35,9 @@ public class MainPriceUpdater {
                             (double) Math.round((priceValue - previousPrice) * 100.0) / 100.0,
                             Math.round(((priceValue / previousPrice) - 1) * 100 * 100.0) / 100.0
                     );
-                    Query query = new Query();
-                    query.insertPrice(price);
+                    if (price.getDate().compareTo(from) >= 0) {
+                        query.insertPrice(price);
+                    }
                     previousPrice = priceValue;
                 }
             }

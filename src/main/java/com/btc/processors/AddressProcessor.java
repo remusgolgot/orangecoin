@@ -6,6 +6,7 @@ import com.btc.database.Query;
 import com.btc.model.Address;
 import com.btc.utils.Utils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class AddressProcessor {
@@ -24,22 +25,29 @@ public class AddressProcessor {
 
     public void printStats() {
         System.out.println("Number of addresses : " + query.countAddresses());
-        System.out.println("Total               : " + Utils.prettyBalance(query.balanceSum()));
-        System.out.println("Total spent < 10%   : " + Utils.prettyBalance(query.noSpentLessThanBalanceSum(0.1)));
-        System.out.println("Total unspent       : " + Utils.prettyBalance(query.noSpentBalanceSum()));
+        System.out.println("Total               : " + BigDecimal.valueOf(query.balanceSum()).toPlainString());
+        System.out.println("Total spent < 10%   : " + query.noSpentLessThanBalanceSum(0.1));
+        System.out.println("Total unspent       : " + query.noSpentBalanceSum());
     }
 
     public void printMeta() {
         List<String> list = query.getMetaTagAddresses();
+        Double sum = 0.0;
         for (String s : list) {
             String[] ss = s.split(",");
             String address = ss[0];
             if (address.length() < 29) {
                 address = address + "       ";
             }
-            System.out.print(address + " " + Utils.prettyBalance(Double.parseDouble(ss[2])) + " " + ss[1]);
+            double v = Double.parseDouble(ss[2]);
+            String balance = v + " " + ss[1];
+            System.out.print(address + " " + balance);
             System.out.println();
+            sum += v;
         }
+        System.out.println("========================");
+        System.out.println("Total " + sum);
+        System.out.println("========================");
     }
 
     private void checkAddress(String addressString) {
@@ -52,6 +60,8 @@ public class AddressProcessor {
             }
             Integer addressFromDB = query.addressExists(address);
             address.setLastUpdate(System.currentTimeMillis());
+            address.setBalance(address.getBalance() / 100000000);
+            address.setReceived(address.getReceived() / 100000000);
             if (addressFromDB == null) {
                 System.out.println("new address ... creating");
                 query.insertAddress(address);

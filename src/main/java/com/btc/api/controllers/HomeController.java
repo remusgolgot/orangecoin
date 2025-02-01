@@ -10,7 +10,7 @@ public class HomeController {
 
     @GetMapping(value = "/test")
     public Integer test() {
-        return 2;
+        return 1;
     }
 
     @GetMapping(value = "/status")

@@ -9,6 +9,7 @@ public class PriceStats {
     String biggestIncrease;
     Double ath;
     Integer daysSinceATH;
+    Double athDrawdown;
 
     public Double getAveragePrice() {
         return averagePrice;
@@ -72,5 +73,13 @@ public class PriceStats {
 
     public void setDaysSinceATH(Integer daysSinceATH) {
         this.daysSinceATH = daysSinceATH;
+    }
+
+    public Double getAthDrawdown() {
+        return athDrawdown;
+    }
+
+    public void setAthDrawdown(Double athDrawdown) {
+        this.athDrawdown = athDrawdown;
     }
 }

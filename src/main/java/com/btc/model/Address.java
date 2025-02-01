@@ -36,7 +36,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return fillWithSpaces(address) + " " + (balance / 100000000) + (!sentZero ? " !!!!!!!!!!!!!! " : "");
+        return fillWithSpaces(address) + " " + (balance) + (!sentZero ? " !!!!!!!!!!!!!! " : "");
     }
 
     public String getAddress() {

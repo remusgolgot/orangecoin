@@ -20,15 +20,18 @@ public class MainBitInfoCharts {
     static String URL_LOCATION = "https://bitinfocharts.com/top-100-richest-bitcoin-addresses.html";
     static BlockClient blockClient = new BlockchainClient();
     static final long timeout = 2200;
-    static final int NR_PAGES = 100;
-    static final int delta = 2; // 2
+    static final int NR_PAGES = 70;
+    static final int delta = 67;
 
     public static void main(String[] args) {
         try {
             System.out.println("Fetching top addresses ...");
             Fetcher fetcher = new Fetcher();
+            List<String> addresses = new ArrayList<>();
             String document = fetcher.fetchDocument(new URL(URL_LOCATION));
-            List<String> addresses = getAddresses(document);
+            if (delta == 1) {
+                addresses.addAll(getAddresses(document));
+            }
             for (int i = delta; i < NR_PAGES + delta; i++) {
                 document = fetcher.fetchDocument(new URL(URL_LOCATION.replace(".html", "-" + i + ".html")));
                 addresses.addAll(getAddresses(document));

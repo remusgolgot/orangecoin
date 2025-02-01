@@ -6,7 +6,7 @@ import com.btc.services.ExportService;
 
 public class Main {
 
-    static String s = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa";
+    static String s = "32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo";
 
     public static void main(String[] args) {
 
@@ -24,25 +24,14 @@ public class Main {
 
         ExportService exportService = new CSVExportService();
         exportService.export("out");
-
-        long l = 1100000000000000L;
+        exportService.exportMeta("meta");
     }
 
 /*
-Number of addresses : 11439
-Total               : 10474041.23659493
-Total spent < 10%   :  7653753.89794245
-Total unspent       :  6885981.45643243
+Number of addresses : 12396
+Total               : 11013851.69851401
+Total spent < 10%   :  8187409.08623855
+Total unspent       :  7407005.82779825
  */
 
-/*
-1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP       58219.41152847 mr100
-3D6kjgsypiAnGY7E1XHDQXapW4whUWaH1H       13797.77035568 Mara
-32ixEdVJWo3kmvJGMTZq5jAQVZZeuwnqzo        6001.76660951 elSalvador
-1CounterpartyXXXXXXXXXXXXXXXUWLpVr        2130.99069234 burn
-1111111111111111111114oLvT2                663.37917235 burn
-1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa         100.30271131 genesis
-1BitcoinEaterAddressDontSendf59kuE          13.35600303 burn
-bc1qq0l4jgg9rcm3puhhfwaz4c9t8hdee8hfz6738z   0.00650284 Germany
- */
 }

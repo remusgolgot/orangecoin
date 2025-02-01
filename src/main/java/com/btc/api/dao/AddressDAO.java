@@ -34,7 +34,7 @@ public class AddressDAO extends GenericDAO {
 
     public List<Address> getAddressesGreater(int amount) {
         return (List<Address>) em.createQuery(
-                        "SELECT a FROM Address a where balance > " + amount + "00000000")
+                        "SELECT a FROM Address a where balance > " + amount)
                 .getResultList();
     }
 }

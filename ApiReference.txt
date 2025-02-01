@@ -1,0 +1,77 @@
+HOME
+
+1. api/home/test
+
+- returns 1 if the system is up
+
+2. api/home/status
+
+- returns "Running" if the system is up
+====================================================================================================
+
+ADDRESSES
+
+1. api/address/{address}
+
+- returns information about a particular address
+- if the address is not in the DB, returns "No result found"
+
+2. api/address/count
+
+- returns the number of addresses in the DB
+
+3. api/address/list
+
+- returns all the addresses in the DB
+
+4. api/address/meta
+
+- returns all the addresses with a meta tag
+- meta information is taken from various sources, and is subject of being incorrect
+
+5. api/address/like/{chunk}
+
+- returns all the addresses matching the given chunk (case-insensitive lookup)
+- if no addresses match the given chunk, returns "No results"
+
+6. api/address/top
+
+- returns the top 100 addresses in the DB by balance
+
+7. api/address/top/{number}
+
+- returns the top "number" addresses in the DB
+
+8. api/address/greater/{amount}
+
+- returns the addresses greater than the given amount (in BTC terms, not in satoshis)
+====================================================================================================
+
+PRICES
+
+1. api/price/{date}
+
+- returns the price information at the given date (closing price based on UTC time)
+- returns "No result found" if there is no price at the given date in the DB
+
+2. api/price/stats
+
+- returns overall price stats for all the prices in the DB
+- stats include : averagePrice, medianPrice, upDays, downDays, ATH, daysSinceATH
+
+3. api/price/stats/from/{from}
+
+- returns price stats, but the interval starts at the given "from" date
+
+4. api/price/stats/from/{from}/{to}
+
+- returns price stats, but the interval starts at the given "from" date and ends at the "to" date
+====================================================================================================
+
+SYSTEMS
+
+1. api/systems (POST)
+
+- returns price variation after a given number of days taking into account certain parameters
+- parameters include streak, upOrDown, amount
+- price variation results include nrOfOccurrences (up and down) overall (nominal price, based on 1 BTC bought/sold) and ROI (based on percentage gain/loss)

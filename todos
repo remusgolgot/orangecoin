@@ -1,0 +1,40 @@
+1. INPUT/OUTPUT
+
+    A. DORMANCY : last interaction (diff to last input or output)
+    B. AGE : diff to first input
+    C. TOXICITY : diff to last output
+    D. UTXO : number of unspent transaction outputs
+
+2. PRICES API
+- check and overwrite when populating (no duplications)
+- fetch prices older than 2013-03-01
+- indicators : DMAs
+
+3. Sort out remaining 35000 addresses (pull addresses from addresses.txt to the DB)
+
+4. Process incoming blocks
+
+5. Time of day for bottom (depending on draw-down %, bounce from bottom)
+=================================================================================
+
+1. System calculation testing (manual, inputs, etc.)
+2. System calculation : outcome after a x% up/down period
+
+3. Automated tests for existing APIs
+4. Unit tests
+
+5. Refactorings
+
+6. Logging
+=================================================================================
+
+
+System calculation testing : input validation, corner cases
+Logging
+
+Unit tests framework
+Unit tests to run at build
+
+Refactorings : code cleanup, remove dead code, restructure code
+
+

@@ -1,10 +1,13 @@
 package com.btc.services;
 
 import com.btc.database.Query;
+import com.btc.model.Entity;
+import liquibase.pro.packaged.E;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CSVExportService implements ExportService {
     @Override
@@ -30,6 +33,50 @@ public class CSVExportService implements ExportService {
                 }
                 i++;
             }
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void exportMeta(String path) {
+        try {
+            FileWriter myWriter = new FileWriter(path + ".csv");
+            myWriter.append("entity, total");
+            myWriter.append("\n");
+            Query query = new Query();
+            int l = 0;
+            List<String> list = query.getMetaTagAddresses();
+            List<Entity> entityList = new ArrayList<>();
+            int i = 0;
+            while (i < list.size()) {
+                String meta = list.get(i).split(",")[1];
+                Double total = Double.valueOf(list.get(i).split(",")[2]);
+                i++;
+                while (i < list.size() && list.get(i).split(",")[1].equals(meta)) {
+                    total += Double.valueOf(list.get(i).split(",")[2]);
+                    i++;
+                }
+                entityList.add(new Entity(meta, total));
+            }
+            entityList.sort(new Comparator<Entity>() {
+                @Override
+                public int compare(Entity o1, Entity o2) {
+                    return o1.getTotal() <= o2.getTotal() ? 1 : -1;
+                }
+            });
+
+            for (int j = 0; j < entityList.size(); j++) {
+                l++;
+                String csq = l + "," + entityList.get(j).getName() + "," + entityList.get(j).getTotal();
+                myWriter.append(csq);
+                myWriter.append("\n");
+            }
+
+            System.out.println("here");
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
