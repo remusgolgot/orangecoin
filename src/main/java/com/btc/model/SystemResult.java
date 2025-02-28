@@ -1,15 +1,18 @@
 package com.btc.model;
 
+import java.util.List;
+
 public class SystemResult {
 
     private int nrOccurrences;
     private int upOccurrences;
     private int downOccurrences;
-    private int timespan;
+    private int target;
     private double averageUp;
     private double averageDown;
     private double overall;
     private double roi;
+    private List<Occurrence> occurrenceList;
 
     public int getNrOccurrences() {
         return nrOccurrences;
@@ -19,12 +22,12 @@ public class SystemResult {
         this.nrOccurrences = nrOccurrences;
     }
 
-    public int getTimespan() {
-        return timespan;
+    public int getTarget() {
+        return target;
     }
 
-    public void setTimespan(int timespan) {
-        this.timespan = timespan;
+    public void setTarget(int target) {
+        this.target = target;
     }
 
     public int getUpOccurrences() {
@@ -73,5 +76,13 @@ public class SystemResult {
 
     public void setRoi(double roi) {
         this.roi = roi;
+    }
+
+    public List<Occurrence> getOccurrenceList() {
+        return occurrenceList;
+    }
+
+    public void setOccurrenceList(List<Occurrence> occurrenceList) {
+        this.occurrenceList = occurrenceList;
     }
 }

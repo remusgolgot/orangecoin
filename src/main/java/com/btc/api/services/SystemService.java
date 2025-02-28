@@ -1,19 +1,23 @@
 package com.btc.api.services;
 
 import com.btc.api.model.Price;
+import com.btc.model.Occurrence;
 import com.btc.model.SystemInput;
 import com.btc.model.SystemResult;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
+import java.util.Calendar;
+
+import static com.btc.utils.Utils.roundTo2Decimals;
 
 @Service
 public class SystemService {
@@ -21,7 +25,7 @@ public class SystemService {
     @Autowired
     protected PriceService priceService;
 
-    public SystemResult getSystemResult(SystemInput systemInput) {
+    public SystemResult getSystemResult(SystemInput systemInput) throws Exception {
         List<Price> priceList = priceService.getFullList();
 
         SystemResult systemResult = new SystemResult();
@@ -30,51 +34,102 @@ public class SystemService {
 
         Date from = systemInput.getFrom();
         Date to = systemInput.getTo();
+        try {
+            if (from == null) {
+                String date_string = "2009-01-01";
+                //Instantiating the SimpleDateFormat class
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                //Parsing the given String to Date object
+                from = (Date) formatter.parse(date_string);
+            }
+
+            if (to == null) {
+                String date_string = "9999-12-31";
+                //Instantiating the SimpleDateFormat class
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                //Parsing the given String to Date object
+                to = (Date) formatter.parse(date_string);
+            }
+        } catch (Exception e) {
+            throw new Exception("from and to dates are wrong");
+        }
+
+        // from is after to
+        if (from.compareTo(to) >= 0) {
+            throw new Exception("from date is after to");
+        }
+
+        int target = systemInput.getTarget();
+        if (target == 0) {
+            target = 1;
+        }
+        if (target < 0) {
+            throw new Exception("target must not be non-negative");
+        }
+        systemResult.setTarget(target);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(to);
+        // use add() method to add the days to the given date
+        cal.add(Calendar.DAY_OF_MONTH, target);
 
         List<Price> priceFilteredByDate = priceList.stream()
-                .filter(getPricePredicate(from, to))
+                .filter(getPricePredicate(from, cal.getTime()))
                 .toList();
 
-        // check params : upDown, streak, amount, timespan -> result is a list of prices that match the conditions
-
-        int timespan = systemInput.getTimespan();
-        if (timespan == 0) {
-            timespan = 1;
-        }
-        systemResult.setTimespan(timespan);
+        // check params and set default values : upDown, streak, amount, timespan -> result is a list of prices that match the conditions
 
         int streak = systemInput.getStreak();
         if (streak == 0) {
             streak = 1;  // default is streak of 1
         }
 
-        double upDown = systemInput.getUpOrDown();
-        if (upDown == 0) {
-            upDown = 1; // default is up (1)
+        if (streak < 0) {
+            throw new Exception("streak must not be non-negative");
         }
 
-        double amount = systemInput.getAmount();
-        if (amount == 0.0) {
-            if (upDown == 1) {
-                amount = 0.01;
-            } else {
-                amount = -0.01;
-            }
+        int timespan = systemInput.getTimespan();
+        if (timespan == 0) {
+            timespan = 1;
+        }
+        if (timespan < 0) {
+            throw new Exception("timespan must not be non-negative");
+        }
+
+        Double min = systemInput.getMin();
+        Double max = systemInput.getMax();
+
+        if (min == null) {
+            min = -100.0;
+        }
+
+        if (max == null) {
+            max = 1000.0;
+        }
+
+        if (min > max) {
+            throw new Exception("min must be lower than max");
         }
 
         List<Price> pricesThatMatchConditions = new ArrayList<>();
-        List<Price> pricesWithTimespan = new ArrayList<>();
+        List<Price> pricesAtTarget = new ArrayList<>();
 
-        for (int i = 0; i < priceFilteredByDate.size() - streak; i++) {
-            if (applyConditions(amount, upDown, priceFilteredByDate.subList(i, i + streak + 1))) {
-                pricesThatMatchConditions.add(priceFilteredByDate.get(i + streak));
-                if (i + streak + timespan < priceFilteredByDate.size()) {
-                    pricesWithTimespan.add(priceFilteredByDate.get(i + streak + timespan));
+        for (int i = 0; i < priceFilteredByDate.size() - streak * timespan - 1; i++) {
+            if (applyConditions(min, max, priceFilteredByDate, i, streak, timespan)) {
+                pricesThatMatchConditions.add(priceFilteredByDate.get(i + timespan * streak));
+                if (i + streak * timespan + target < priceFilteredByDate.size()) {
+                    pricesAtTarget.add(priceFilteredByDate.get(i + streak * timespan + target));
                 } else {
-                    pricesWithTimespan.add(priceFilteredByDate.get(priceFilteredByDate.size() - 1));
+                    pricesAtTarget.add(priceFilteredByDate.get(priceFilteredByDate.size() - 1));
                 }
             }
         }
+        // no matching prices
+        if (pricesThatMatchConditions.isEmpty()) {
+            return null;
+        }
+
+        List<Occurrence> occurrencesList = new ArrayList<>();
 
         // aggregate results and return them in the systemResult object
         int upOccurrences = 0;
@@ -82,25 +137,27 @@ public class SystemService {
         double overallUp = 0.0;
         double overallDown = 0.0;
         double overallROI = 0.0;
-        for (int i = 0; i < pricesWithTimespan.size(); i++) {
-            Double priceAfter = pricesWithTimespan.get(i).getPrice();
+        for (int i = 0; i < pricesAtTarget.size(); i++) {
             Double priceAtCondition = pricesThatMatchConditions.get(i).getPrice();
-            System.out.println(priceAfter);
-            System.out.println(priceAtCondition);
-            System.out.println();
-            if (priceAfter >= priceAtCondition) {
+            Double priceAtTarget = pricesAtTarget.get(i).getPrice();
+            System.out.println("priceAtCondition " + priceAtCondition);
+            System.out.println("priceAtTarget " + priceAtTarget);
+            if (priceAtTarget >= priceAtCondition) {
                 upOccurrences++;
-                overallUp += priceAfter - priceAtCondition;
-                overallROI += priceAfter / priceAtCondition;
+                overallUp += priceAtTarget - priceAtCondition;
+                overallROI += priceAtTarget / priceAtCondition;
             } else {
                 downOccurrences++;
-                overallDown += priceAfter - priceAtCondition;
-                overallROI += priceAfter / priceAtCondition;
+                overallDown += priceAtTarget - priceAtCondition;
+                overallROI += priceAtTarget / priceAtCondition;
             }
-            System.out.println(overallROI);
+            occurrencesList.add(new Occurrence(priceAtCondition, priceAtTarget, pricesThatMatchConditions.get(i).getDate()));
         }
 
-        int size = pricesWithTimespan.size();
+        int size = pricesAtTarget.size();
+        if ("full".equalsIgnoreCase(systemInput.getMode())) {
+            systemResult.setOccurrenceList(occurrencesList);
+        }
         systemResult.setNrOccurrences(size);
         systemResult.setUpOccurrences(upOccurrences);
         systemResult.setDownOccurrences(downOccurrences);
@@ -109,41 +166,35 @@ public class SystemService {
         systemResult.setAverageUp(Math.round(overallUp / upOccurrences));
 
         systemResult.setOverall(Math.round(overallUp + overallDown));
-        systemResult.setRoi((overallROI / size - 1) * 100);
+        systemResult.setRoi(roundTo2Decimals((overallROI / size - 1) * 100));
         System.out.println("Finished system calculation");
         return systemResult;
     }
 
-    private boolean applyConditions(double amount, double upDown, List<Price> prices) {
-        if (amount < 0 && upDown == 1) {
-            return false;
-        }
-        if (amount > 0 && upDown == -1) {
-            return false;
-        }
-        for (int i = 0; i < prices.size() - 1; i++) {
-            for (int j = i + 1; j < prices.size(); j++) {
-                if (prices.get(j).getChg() <= amount && upDown == 1) {
-                    return false;
-                }
-                if (prices.get(j).getChg() >= amount && upDown == -1) {
-                    return false;
-                }
+    private boolean applyConditions(double min, double max, List<Price> prices, int index, int streak, int timespan) {
+
+        int j = index;
+        while (streak > 0 && j + timespan < prices.size()) {
+            streak--;
+            Price startPrice = prices.get(j);
+            Price endPrice = prices.get(j + timespan);
+            double delta = endPrice.getPrice() - startPrice.getPrice();
+            double change = delta / startPrice.getPrice() * 100;
+            if (change <= min || change >= max) {
+                return false;
             }
+            j += timespan;
         }
 
         return true;
     }
 
+    //TODO: first day of the interval is not returned !!!
     private static @NotNull Predicate<Price> getPricePredicate(Date from, Date to) {
         return p -> {
-            if (from == null || to == null) {
-                return true;
-            }
             try {
-                int f = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(p.getDate()).compareTo(from);
-                int t = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(p.getDate()).compareTo(to);
-                return f >= 0 && t <= 0;
+                java.util.Date parse = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(p.getDate());
+                return p.getDate().equals(from.toString()) || parse.after(from) && parse.before(to);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

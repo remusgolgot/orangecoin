@@ -20,8 +20,8 @@ public class MainBitInfoCharts {
     static String URL_LOCATION = "https://bitinfocharts.com/top-100-richest-bitcoin-addresses.html";
     static BlockClient blockClient = new BlockchainClient();
     static final long timeout = 2200;
-    static final int NR_PAGES = 70;
-    static final int delta = 67;
+    static final int NR_PAGES = 1;
+    static final int delta = 1;
 
     public static void main(String[] args) {
         try {

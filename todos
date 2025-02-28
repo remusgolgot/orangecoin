@@ -6,35 +6,39 @@
     D. UTXO : number of unspent transaction outputs
 
 2. PRICES API
-- check and overwrite when populating (no duplications)
-- fetch prices older than 2013-03-01
-- indicators : DMAs
+    * check and overwrite when populating (no duplications)
+    * fetch prices older than 2013-03-01
+    * indicators : DMAs
 
 3. Sort out remaining 35000 addresses (pull addresses from addresses.txt to the DB)
 
 4. Process incoming blocks
 
-5. Time of day for bottom (depending on draw-down %, bounce from bottom)
+5. Time of day
+    * e.g. for bottom (depending on draw-down %, bounce from bottom)
 =================================================================================
-
-1. System calculation testing (manual, inputs, etc.)
-2. System calculation : outcome after a x% up/down period
-
-3. Automated tests for existing APIs
-4. Unit tests
-
-5. Refactorings
-
-6. Logging
+Systems
 =================================================================================
+1. Testing
+       * Automated tests for existing APIs
+           + run at each build
+       * Unit tests
+           + cover all relevant scenarios
 
+2. Refactorings
+    * code cleanup, remove dead code, restructure code
 
-System calculation testing : input validation, corner cases
-Logging
+3. Logging
 
-Unit tests framework
-Unit tests to run at build
+4. DCA
+       * from (mandatory)
+       * to (optional, by default until present day)
+       * buyspan (in days)
+       * $ amount
+       * timespan (e.g. 1 year after, by default until present day)
+       * result
+           + final amount
+           + P/L
+           + ROI
 
-Refactorings : code cleanup, remove dead code, restructure code
-
-
+5. safeguard APIs for correct data types (e.g. for dates only valid ones are allowed i.e. no exceptions are thrown)

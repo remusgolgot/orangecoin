@@ -25,7 +25,7 @@ public class SystemController {
      *
      * time span is optional (default is 1 day after, can be a value between 1 and 365)
      * upOrDown is optional (default is up (1), can also be down (-1))
-     * streak is optional (default is no streak (0 acts as no streak), can be a value between 0 and 7)
+     * streak is optional (default is no streak (0 acts as no streak))
      * amount is optional (default is 0, is a double value acting as a percentage)
      * from is optional (default is from the beginning of the data set)
      * to is optional (default is up until the end of the data set)
@@ -34,8 +34,16 @@ public class SystemController {
      */
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseModel<SystemResult> getSystemResult(@Valid @RequestBody SystemInput systemInput) {
-        SystemResult systemResult = systemService.getSystemResult(systemInput);
-        return getResponseModel(systemResult);
+
+        try {
+            SystemResult systemResult = systemService.getSystemResult(systemInput);
+            return getResponseModel(systemResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseModel<SystemResult> responseModel = new ResponseModel<>();
+            responseModel.setError(e.getMessage());
+            return responseModel;
+        }
     }
 
     private static @NotNull <T> ResponseModel<T> getResponseModel(T entity) {
@@ -43,7 +51,7 @@ public class SystemController {
         response.setData(entity);
         response.setStatus(entity != null);
         response.setCount(entity != null ? 1 : 0);
-        response.setMessage(entity == null ? "No result found" : "");
+        response.setMessage(entity == null ? "No result for the given inputs" : "");
         return response;
     }
 }

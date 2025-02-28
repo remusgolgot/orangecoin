@@ -1,15 +1,17 @@
 package com.btc.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class SystemInput {
 
     private int streak;
-    private int upOrDown; // 0 or 1
-    private double amount; // can be 0
+    private Double min; // can be 0
+    private Double max; // can be 0
     private int timespan;
+    private int target;
     private Date from;
     private Date to;
+    private String mode;
 
     public int getStreak() {
         return streak;
@@ -19,20 +21,20 @@ public class SystemInput {
         this.streak = streak;
     }
 
-    public int getUpOrDown() {
-        return upOrDown;
+    public Double getMin() {
+        return min;
     }
 
-    public void setUpOrDown(int upOrDown) {
-        this.upOrDown = upOrDown;
+    public void setMin(Double min) {
+        this.min = min;
     }
 
-    public double getAmount() {
-        return amount;
+    public Double getMax() {
+        return max;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setMax(Double max) {
+        this.max = max;
     }
 
     public int getTimespan() {
@@ -57,5 +59,21 @@ public class SystemInput {
 
     public void setTo(Date to) {
         this.to = to;
+    }
+
+    public int getTarget() {
+        return target;
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

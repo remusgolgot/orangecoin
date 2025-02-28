@@ -4,12 +4,9 @@ import com.btc.api.dao.PriceDAO;
 import com.btc.api.model.Price;
 import com.btc.model.PriceStats;
 import com.btc.utils.Utils;
-import liquibase.pro.packaged.P;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -51,7 +48,7 @@ public class PriceService {
             return priceStats;
         }
 
-        double lastPrice = priceList.get(priceList.size() - 1).getPrice();
+        double currentPrice = priceList.get(priceList.size() - 1).getPrice();
 
         List<Double> prices = priceList.stream().map(Price::getPrice).collect(Collectors.toList());
         Collections.sort(prices);
@@ -71,6 +68,7 @@ public class PriceService {
         double ath = athPrice.getPrice();
 
         int daysSinceATH = (int) (priceList.get(priceList.size() - 1).getId() - athPrice.getId());
+        priceStats.setCurrentPrice(currentPrice);
         priceStats.setMedianPrice(median);
         priceStats.setAveragePrice(Utils.roundTo2Decimals(average));
         priceStats.setDownDays((int) downDays);
@@ -79,7 +77,7 @@ public class PriceService {
         priceStats.setBiggestIncrease(maxChange.toString());
         priceStats.setAth(ath);
         priceStats.setDaysSinceATH(daysSinceATH);
-        double athDrawdown = 100 * (1 - lastPrice / ath);
+        double athDrawdown = 100 * (1 - currentPrice / ath);
         athDrawdown = Utils.roundTo2Decimals(athDrawdown);
         priceStats.setAthDrawdown(athDrawdown);
 

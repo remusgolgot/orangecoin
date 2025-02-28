@@ -52,6 +52,7 @@ PRICES
 1. api/price/{date}
 
 - returns the price information at the given date (closing price based on UTC time)
+- date format is YYYY-MM-dd
 - returns "No result found" if there is no price at the given date in the DB
 
 2. api/price/stats
@@ -62,10 +63,12 @@ PRICES
 3. api/price/stats/from/{from}
 
 - returns price stats, but the interval starts at the given "from" date
+- date format is YYYY-MM-dd
 
 4. api/price/stats/from/{from}/{to}
 
 - returns price stats, but the interval starts at the given "from" date and ends at the "to" date
+- date format is YYYY-MM-dd
 ====================================================================================================
 
 SYSTEMS
@@ -73,5 +76,45 @@ SYSTEMS
 1. api/systems (POST)
 
 - returns price variation after a given number of days taking into account certain parameters
-- parameters include streak, upOrDown, amount
-- price variation results include nrOfOccurrences (up and down) overall (nominal price, based on 1 BTC bought/sold) and ROI (based on percentage gain/loss)
+
+- parameters include streak, upOrDown, min, max, etc.
+
+- price variation results include
+    * nrOfOccurrences (up and down)
+    * overall (nominal price, based on 1 BTC bought/sold each time)
+    * ROI (based on percentage gain/loss)
+
+- date format is YYYY-MM-dd
+    * "from" date must be strictly lower than "to"
+
+Inputs:
+    - time period
+        * optional - if not set, applies on all the history
+        * [from; end]
+        * [start; to]
+        * [from; to]
+    - timespan
+        * in days
+        * amount of time that the rule applies to
+        * [1; 365] - if not set, default is 1
+    - target
+        * required
+        * in days
+        * amount of time after the timespan where the ROI is calculated
+        * [1; 365] - if not set, outcome is the end of the history
+    - streak (optional)
+        * if present, timespan intervals are considered consecutive in order to have the ROI calculated
+        * if not set, considered as 1 (no streak)
+    - min, max
+        * as percentages
+        * if min not present, set at -100
+        * if max not present, set at 1000
+        * define the interval where the search is mde
+
+Examples:
+
+    * 30 day outcome after a 15% up 7 period
+    * 60 day outcome after a 10% down 3 day period
+    * 7 day outcome after 3 straight 0.7 down days
+    * 60 day outcome after 3 straight down weeks
+    * 7 day outcome after 4 straight days ranging from [-1.0;1.0]

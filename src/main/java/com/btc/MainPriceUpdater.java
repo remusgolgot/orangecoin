@@ -13,7 +13,7 @@ public class MainPriceUpdater {
         BufferedReader reader;
         System.out.println("Updating Prices ...");
         Query query = new Query();
-        String from = "2025-01-29";
+        String from = "2025-02-26";
         try {
             reader = new BufferedReader(new FileReader("C:\\Users\\sumer\\code\\orangecoin\\other\\prices.csv"));
             String line = reader.readLine();

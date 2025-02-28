@@ -1,6 +1,7 @@
 package com.btc.model;
 
 public class PriceStats {
+    Double currentPrice;
     Double averagePrice;
     Double medianPrice;
     Integer upDays;
@@ -10,6 +11,14 @@ public class PriceStats {
     Double ath;
     Integer daysSinceATH;
     Double athDrawdown;
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
 
     public Double getAveragePrice() {
         return averagePrice;

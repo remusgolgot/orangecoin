@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name = "price")
 public class Price {
@@ -90,6 +90,16 @@ public class Price {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Price(Long id, String date, Double price, Double marketCap, Double volume, Double variation, Double chg) {
+        this.id = id;
+        this.date = date;
+        this.price = price;
+        this.marketCap = marketCap;
+        this.volume = volume;
+        this.variation = variation;
+        this.chg = chg;
     }
 
     @Override

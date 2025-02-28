@@ -5,6 +5,8 @@ import com.btc.model.Price;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utils {
 
@@ -22,5 +24,11 @@ public class Utils {
         return bd.doubleValue();
     }
 
+    public static double roundToNDecimals(double value, int nrDecimals) {
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(nrDecimals, RoundingMode.HALF_UP);
+
+        return bd.doubleValue();
+    }
 
 }

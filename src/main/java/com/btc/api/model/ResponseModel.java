@@ -7,12 +7,14 @@ public class ResponseModel<T> {
 
     private Boolean status;
     private String message;
+    private String error;
     private int count;
     private T data;
 
     public ResponseModel() {
         this.status = true;
         this.message = "";
+        this.error = "";
         this.data = null;
         this.count = 0;
     }
@@ -42,5 +44,13 @@ public class ResponseModel<T> {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }
