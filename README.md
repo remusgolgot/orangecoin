@@ -1,9 +1,12 @@
-bitcoin
+Bitcoin (aka OrangeCoin)
+========================
 
-start with : 
+Start the server
+    - mvn spring-boot:run
 
-mvn spring-boot:run
+Docs 
+    - Swagger : http://localhost:8080/swagger-ui/index.html
+    - ApiReference.txt
 
-Docs : http://localhost:8080/swagger-ui/index.html
-
-historical data taken from : https://www.coingecko.com/en/coins/bitcoin/historical_data?start=2013-05-01&end=2024-11-22
+Historical data 
+    - https://www.coingecko.com/en/coins/bitcoin/historical_data?start=2013-05-01

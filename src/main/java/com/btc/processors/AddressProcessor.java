@@ -4,7 +4,6 @@ import com.btc.client.BlockClient;
 import com.btc.client.BlockchainClient;
 import com.btc.database.Query;
 import com.btc.model.Address;
-import com.btc.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.List;

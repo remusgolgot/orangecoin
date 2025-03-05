@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.btc.api.messages.Responses.SYSTEM_SERVICE_NO_RESULT;
+
 @RestController
 @RequestMapping("/api/systems")
 public class SystemController {
@@ -23,10 +25,10 @@ public class SystemController {
      * Calculates the results of the given system (as systemInput)
      * If no input is given, it returns the result of what happened after an up day
      *
-     * time span is optional (default is 1 day after, can be a value between 1 and 365)
-     * upOrDown is optional (default is up (1), can also be down (-1))
+     * target is optional (default is 1 day after)
+     * timespan is optional (default is 1 day timespan)
      * streak is optional (default is no streak (0 acts as no streak))
-     * amount is optional (default is 0, is a double value acting as a percentage)
+     * min and max (at least one of them must be provided)
      * from is optional (default is from the beginning of the data set)
      * to is optional (default is up until the end of the data set)
      *
@@ -39,8 +41,7 @@ public class SystemController {
             SystemResult systemResult = systemService.getSystemResult(systemInput);
             return getResponseModel(systemResult);
         } catch (Exception e) {
-            e.printStackTrace();
-            ResponseModel<SystemResult> responseModel = new ResponseModel<>();
+            ResponseModel<SystemResult> responseModel = getResponseModel(null);
             responseModel.setError(e.getMessage());
             return responseModel;
         }
@@ -51,7 +52,7 @@ public class SystemController {
         response.setData(entity);
         response.setStatus(entity != null);
         response.setCount(entity != null ? 1 : 0);
-        response.setMessage(entity == null ? "No result for the given inputs" : "");
+        response.setMessage(entity == null ? SYSTEM_SERVICE_NO_RESULT : "");
         return response;
     }
 }

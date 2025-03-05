@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.Calendar;
+import java.util.stream.Collectors;
 
+import static com.btc.api.messages.Responses.*;
 import static com.btc.utils.Utils.roundTo2Decimals;
 
 @Service
@@ -40,7 +42,7 @@ public class SystemService {
                 //Instantiating the SimpleDateFormat class
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 //Parsing the given String to Date object
-                from = (Date) formatter.parse(date_string);
+                from = formatter.parse(date_string);
             }
 
             if (to == null) {
@@ -48,7 +50,7 @@ public class SystemService {
                 //Instantiating the SimpleDateFormat class
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 //Parsing the given String to Date object
-                to = (Date) formatter.parse(date_string);
+                to = formatter.parse(date_string);
             }
         } catch (Exception e) {
             throw new Exception("from and to dates are wrong");
@@ -56,7 +58,7 @@ public class SystemService {
 
         // from is after to
         if (from.compareTo(to) >= 0) {
-            throw new Exception("from date is after to");
+            throw new Exception(FROM_TO_DATES_WRONG);
         }
 
         int target = systemInput.getTarget();
@@ -64,7 +66,7 @@ public class SystemService {
             target = 1;
         }
         if (target < 0) {
-            throw new Exception("target must not be non-negative");
+            throw new Exception(NEGATIVE_TARGET);
         }
         systemResult.setTarget(target);
 
@@ -75,7 +77,12 @@ public class SystemService {
 
         List<Price> priceFilteredByDate = priceList.stream()
                 .filter(getPricePredicate(from, cal.getTime()))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new)); // mutable list
+
+        double firstPrice = priceFilteredByDate.get(0).getPrice();
+        double change = priceFilteredByDate.get(0).getChg();
+        double priceBeforeTheFirstOne = firstPrice / (change / 100 + 1);
+        priceFilteredByDate.add(0, new Price(0L, "", priceBeforeTheFirstOne, 0.0, 0.0, 0.0, 0.0));
 
         // check params and set default values : upDown, streak, amount, timespan -> result is a list of prices that match the conditions
 
@@ -85,7 +92,7 @@ public class SystemService {
         }
 
         if (streak < 0) {
-            throw new Exception("streak must not be non-negative");
+            throw new Exception(NEGATIVE_STREAK);
         }
 
         int timespan = systemInput.getTimespan();
@@ -93,11 +100,18 @@ public class SystemService {
             timespan = 1;
         }
         if (timespan < 0) {
-            throw new Exception("timespan must not be non-negative");
+            throw new Exception(NEGATIVE_TIMESPAN);
+        }
+        if (timespan > 365) {
+            throw new Exception(TIMESPAN_TOO_HIGH);
         }
 
         Double min = systemInput.getMin();
         Double max = systemInput.getMax();
+
+        if (min == null && max == null) {
+            throw new Exception(MIN_MAX_NOT_PRESENT);
+        }
 
         if (min == null) {
             min = -100.0;
@@ -108,7 +122,7 @@ public class SystemService {
         }
 
         if (min > max) {
-            throw new Exception("min must be lower than max");
+            throw new Exception(MIN_HIGHER_THAN_MAX);
         }
 
         List<Price> pricesThatMatchConditions = new ArrayList<>();
@@ -145,12 +159,11 @@ public class SystemService {
             if (priceAtTarget >= priceAtCondition) {
                 upOccurrences++;
                 overallUp += priceAtTarget - priceAtCondition;
-                overallROI += priceAtTarget / priceAtCondition;
             } else {
                 downOccurrences++;
                 overallDown += priceAtTarget - priceAtCondition;
-                overallROI += priceAtTarget / priceAtCondition;
             }
+            overallROI += priceAtTarget / priceAtCondition;
             occurrencesList.add(new Occurrence(priceAtCondition, priceAtTarget, pricesThatMatchConditions.get(i).getDate()));
         }
 
@@ -180,7 +193,7 @@ public class SystemService {
             Price endPrice = prices.get(j + timespan);
             double delta = endPrice.getPrice() - startPrice.getPrice();
             double change = delta / startPrice.getPrice() * 100;
-            if (change <= min || change >= max) {
+            if (change < min || change > max) {
                 return false;
             }
             j += timespan;
@@ -189,12 +202,11 @@ public class SystemService {
         return true;
     }
 
-    //TODO: first day of the interval is not returned !!!
     private static @NotNull Predicate<Price> getPricePredicate(Date from, Date to) {
         return p -> {
             try {
                 java.util.Date parse = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(p.getDate());
-                return p.getDate().equals(from.toString()) || parse.after(from) && parse.before(to);
+                return parse.toString().equals(from.toString()) || parse.after(from) && parse.before(to);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

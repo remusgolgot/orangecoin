@@ -1,6 +1,5 @@
 package com.btc.api.dao;
 
-import com.btc.api.model.Address;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;

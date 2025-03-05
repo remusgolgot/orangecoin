@@ -2,12 +2,10 @@ package com.btc.services;
 
 import com.btc.database.Query;
 import com.btc.model.Entity;
-import liquibase.pro.packaged.E;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CSVExportService implements ExportService {
     @Override

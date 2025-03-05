@@ -2,7 +2,6 @@ package com.btc.database;
 
 import com.btc.model.Address;
 import com.btc.model.Price;
-import com.btc.utils.Utils;
 
 import java.sql.*;
 import java.util.ArrayList;

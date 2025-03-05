@@ -1,12 +1,8 @@
 package com.btc.utils;
 
-import com.btc.model.Price;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Utils {
 

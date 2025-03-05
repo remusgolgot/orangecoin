@@ -28,10 +28,10 @@ public class Main {
     }
 
 /*
-Number of addresses : 12697
-Total               : 11084717.49841764
-Total spent < 10%   :  8243150.209415918
-Total unspent       :  7463993.67720603
+Number of addresses : 12812
+Total               : 11215803.603146605
+Total spent < 10%   :  8354049.749380772
+Total unspent       :  7563556.113392331
  */
 
 }

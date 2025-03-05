@@ -14,31 +14,32 @@
 
 4. Process incoming blocks
 
-5. Time of day
-    * e.g. for bottom (depending on draw-down %, bounce from bottom)
-=================================================================================
-Systems
-=================================================================================
-1. Testing
-       * Automated tests for existing APIs
-           + run at each build
-       * Unit tests
-           + cover all relevant scenarios
+5. Systems API
+    * interval of changes
+        -> e.g. : [-5,0,1,3,2,7,1,3]
+        -> e.g. : [-4,null,-4,null,null,7]
+        -> this mode ignores all other inputs, besides from,to,target
 
-2. Refactorings
-    * code cleanup, remove dead code, restructure code
+6. DCA Calculator
+             * from (mandatory)
+             * to (optional, by default until present day)
+             * buyspan (in days)
+             * $ amount
+             * timespan (e.g. 1 year after, by default until present day)
+             * result
+                 + final amount
+                 + P/L
+                 + ROI
 
-3. Logging
+7. Automated tests
+    * run at each build
 
-4. DCA
-       * from (mandatory)
-       * to (optional, by default until present day)
-       * buyspan (in days)
-       * $ amount
-       * timespan (e.g. 1 year after, by default until present day)
-       * result
-           + final amount
-           + P/L
-           + ROI
+8. Unit tests
+    + price controllers unit tests
+    + address controllers unit tests
 
-5. safeguard APIs for correct data types (e.g. for dates only valid ones are allowed i.e. no exceptions are thrown)
+9. Refactorings
+       * code cleanup, remove dead code, restructure code
+       * safeguard APIs for correct data types (e.g. for dates only valid ones are allowed i.e. no exceptions are thrown)
+
+10. Logging

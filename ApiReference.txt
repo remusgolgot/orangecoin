@@ -77,7 +77,7 @@ SYSTEMS
 
 - returns price variation after a given number of days taking into account certain parameters
 
-- parameters include streak, upOrDown, min, max, etc.
+- parameters include streak, timespan, min, max, etc.
 
 - price variation results include
     * nrOfOccurrences (up and down)
@@ -98,10 +98,10 @@ Inputs:
         * amount of time that the rule applies to
         * [1; 365] - if not set, default is 1
     - target
-        * required
         * in days
+        * if not set, default is 1
         * amount of time after the timespan where the ROI is calculated
-        * [1; 365] - if not set, outcome is the end of the history
+        * if not set, outcome is the end of the history
     - streak (optional)
         * if present, timespan intervals are considered consecutive in order to have the ROI calculated
         * if not set, considered as 1 (no streak)
@@ -109,7 +109,10 @@ Inputs:
         * as percentages
         * if min not present, set at -100
         * if max not present, set at 1000
-        * define the interval where the search is mde
+        * define the interval where the search is made
+        * at least one of them must be provided
+    - mode
+        * value of "full" means occurrences are also returned
 
 Examples:
 
