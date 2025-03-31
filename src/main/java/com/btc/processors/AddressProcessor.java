@@ -3,9 +3,8 @@ package com.btc.processors;
 import com.btc.client.BlockClient;
 import com.btc.client.BlockchainClient;
 import com.btc.database.Query;
-import com.btc.model.Address;
+import com.btc.model.AddressDto;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class AddressProcessor {
@@ -24,14 +23,14 @@ public class AddressProcessor {
 
     public void printStats() {
         System.out.println("Number of addresses : " + query.countAddresses());
-        System.out.println("Total               : " + BigDecimal.valueOf(query.balanceSum()).toPlainString());
-        System.out.println("Total spent < 10%   : " + query.noSpentLessThanBalanceSum(0.1));
-        System.out.println("Total unspent       : " + query.noSpentBalanceSum());
+        System.out.println("Total               : " + query.balanceSum() / 100000000.0) ;
+        System.out.println("Total spent < 10%   : " + query.noSpentLessThanBalanceSum(0.1) / 100000000.0);
+        System.out.println("Total unspent       : " + query.noSpentBalanceSum() / 100000000.0);
     }
 
     public void printMeta() {
         List<String> list = query.getMetaTagAddresses();
-        Double sum = 0.0;
+        double sum = 0.0;
         for (String s : list) {
             String[] ss = s.split(",");
             String address = ss[0];
@@ -52,22 +51,8 @@ public class AddressProcessor {
     private void checkAddress(String addressString) {
         try {
             long timeout = 2200;
-            Address address = blockClient.callAddressAPI(addressString, timeout);
-            if (address == null) {
-                System.out.println("SKIPPING " + addressString);
-                return;
-            }
-            Integer addressFromDB = query.addressExists(address);
-            address.setLastUpdate(System.currentTimeMillis());
-            address.setBalance(address.getBalance() / 100000000);
-            address.setReceived(address.getReceived() / 100000000);
-            if (addressFromDB == null) {
-                System.out.println("new address ... creating");
-                query.insertAddress(address);
-            } else {
-                System.out.println("address exists ... updating");
-                query.updateAddress(address);
-            }
+            AddressDto address = blockClient.callAddressAPI(addressString, timeout);
+            System.out.println(address);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

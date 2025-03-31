@@ -1,8 +1,8 @@
 package api.services;
 
+import com.btc.api.model.Price;
 import com.btc.api.services.PriceService;
 import com.btc.api.services.SystemService;
-import com.btc.api.model.Price;
 import com.btc.model.Occurrence;
 import com.btc.model.SystemInput;
 import com.btc.model.SystemResult;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class SystemServiceTest {
+public class AddressServiceTest {
 
     @InjectMocks
     private SystemService systemService;

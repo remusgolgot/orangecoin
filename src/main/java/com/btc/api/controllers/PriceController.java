@@ -19,6 +19,16 @@ public class PriceController {
     PriceService priceService;
 
     /**
+     * @param date
+     * @return the price at the given date
+     */
+    @GetMapping(value = "/{date}")
+    public ResponseModel<Price> getPriceAt(@PathVariable(value = "date") String date) {
+        Price result = priceService.getPriceAt(date);
+        return getResponseModel(result);
+    }
+
+    /**
      * @return price stats
      */
     @GetMapping(value = "/stats")
@@ -43,16 +53,6 @@ public class PriceController {
     public ResponseModel<PriceStats> getStatsFromTo(@PathVariable(value = "from") String dateFrom, @PathVariable(value = "to") String dateTo) {
         PriceStats priceStats = priceService.getPriceStatsFromTo(dateFrom, dateTo);
         return getResponseModel(priceStats);
-    }
-
-    /**
-     * @param date
-     * @return the price at the given date
-     */
-    @GetMapping(value = "/{date}")
-    public ResponseModel<Price> getPriceAt(@PathVariable(value = "date") String date) {
-        Price result = priceService.getPriceAt(date);
-        return getResponseModel(result);
     }
 
     private static @NotNull <T> ResponseModel<T> getResponseModel(T entity) {

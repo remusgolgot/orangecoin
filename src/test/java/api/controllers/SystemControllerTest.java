@@ -26,7 +26,7 @@ public class SystemControllerTest {
     private SystemController systemController;
 
     @Test
-    public void systemServiceReturnsNull() throws Exception {
+    public void systemServiceReturnsNoResult() throws Exception {
         SystemInput systemInput = new SystemInput();
         when(systemService.getSystemResult(systemInput)).thenReturn(null);
         ResponseModel<SystemResult> result = systemController.getSystemResult(systemInput);

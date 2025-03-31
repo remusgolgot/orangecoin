@@ -32,9 +32,33 @@ public class AddressDAO extends GenericDAO {
                 .getResultList();
     }
 
-    public List<Address> getAddressesGreater(int amount) {
+    public List<Address> getAddressesGreater(long amount) {
         return (List<Address>) em.createQuery(
                         "SELECT a FROM Address a where balance > " + amount)
                 .getResultList();
+    }
+
+    public Double getTotalBalance() {
+        return (Double) em.createQuery(
+                        "SELECT SUM(balance) FROM Address")
+                .getResultList().stream().findFirst().orElse(0.0);
+    }
+
+    public Long getNrNonEmptyAddresses() {
+        return (Long) em.createQuery(
+                        "select count(*) from Address a where balance > 0")
+                .getResultList().stream().findFirst().orElse(0);
+    }
+
+    public Double getSpentZeroAddressesSum() {
+        return (Double) em.createQuery(
+                        "SELECT sum(balance) FROM Address WHERE balance = received")
+                .getResultList().stream().findFirst().orElse(0.0);
+    }
+
+    public Double getLowSpentAddressesSum() {
+        return (Double) em.createQuery(
+                        "SELECT sum(balance) AS sum FROM Address where (received-balance)/received < 0.1")
+                .getResultList().stream().findFirst().orElse(0.0);
     }
 }

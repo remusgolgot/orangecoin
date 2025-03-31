@@ -10,6 +10,8 @@ public final class Responses {
     public static final String TIMESPAN_TOO_HIGH = "timespan must not be greater than 365";
     public static final String FROM_TO_DATES_WRONG = "from date must be before to";
     public static final String SYSTEM_SERVICE_NO_RESULT = "No result for the given inputs";
+    public static final String SYSTEM_SERVICE_NO_RESULT_LIST = "No results";
+    public static final String AMOUNT_IS_GREATER_THAN_MAX_SUPPLY = "Amount is greater than max supply";
 
 
 }

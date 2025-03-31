@@ -30,6 +30,12 @@ public class Address {
     @Column(name = "meta")
     private String meta;
 
-    @Column(name = "lastUpdate")
-    private Long lastUpdate;
+    @Column(name = "lastOutput")
+    private Long lastOutput;
+
+    @Column(name = "lastInput")
+    private Long lastInput;
+
+    @Column(name = "firstInput")
+    private Long firstInput;
 }

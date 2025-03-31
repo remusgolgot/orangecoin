@@ -1,71 +1,77 @@
 HOME
 
-1. api/home/test
+1. api/home/test (GET)
 
 - returns 1 if the system is up
 
-2. api/home/status
+2. api/home/status (GET)
 
 - returns "Running" if the system is up
 ====================================================================================================
 
 ADDRESSES
 
-1. api/address/{address}
+1. api/address/{address} (GET)
 
 - returns information about a particular address
 - if the address is not in the DB, returns "No result found"
 
-2. api/address/count
+2. api/address/{address}/full (GET)
+
+- returns full information about a particular address
+- if the address is not in the DB, returns "No result found"
+- includes extra information, such as toxicity, age, dormancy
+
+3. api/address/count (GET)
 
 - returns the number of addresses in the DB
 
-3. api/address/list
-
-- returns all the addresses in the DB
-
-4. api/address/meta
+4. api/address/meta (GET)
 
 - returns all the addresses with a meta tag
 - meta information is taken from various sources, and is subject of being incorrect
 
-5. api/address/like/{chunk}
+5. api/address/like/{chunk} (GET)
 
 - returns all the addresses matching the given chunk (case-insensitive lookup)
 - if no addresses match the given chunk, returns "No results"
 
-6. api/address/top
+6. api/address/top (GET)
 
 - returns the top 100 addresses in the DB by balance
 
-7. api/address/top/{number}
+7. api/address/top/{number} (GET)
 
 - returns the top "number" addresses in the DB
 
-8. api/address/greater/{amount}
+8. api/address/greater/{amount} (GET)
 
 - returns the addresses greater than the given amount (in BTC terms, not in satoshis)
+
+9. api/address/summary (GET)
+
+- returns general information about the data, such as total nr of addresses, total balance, low spend balance, nr of utxos, etc.
 ====================================================================================================
 
 PRICES
 
-1. api/price/{date}
+1. api/price/{date} (GET)
 
 - returns the price information at the given date (closing price based on UTC time)
 - date format is YYYY-MM-dd
 - returns "No result found" if there is no price at the given date in the DB
 
-2. api/price/stats
+2. api/price/stats (GET)
 
 - returns overall price stats for all the prices in the DB
 - stats include : averagePrice, medianPrice, upDays, downDays, ATH, daysSinceATH
 
-3. api/price/stats/from/{from}
+3. api/price/stats/from/{from} (GET)
 
 - returns price stats, but the interval starts at the given "from" date
 - date format is YYYY-MM-dd
 
-4. api/price/stats/from/{from}/{to}
+4. api/price/stats/from/{from}/{to} (GET)
 
 - returns price stats, but the interval starts at the given "from" date and ends at the "to" date
 - date format is YYYY-MM-dd

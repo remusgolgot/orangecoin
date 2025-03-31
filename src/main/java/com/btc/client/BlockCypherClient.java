@@ -1,6 +1,8 @@
 package com.btc.client;
 
-import com.btc.model.Address;
+import com.btc.model.AddressDto;
+import com.btc.api.model.Block;
+import com.btc.api.model.Transaction;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -10,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class BlockCypherClient implements BlockClient{
 
-    public Address callAddressAPI(String addressString, long timeout) {
+    public AddressDto callAddressAPI(String addressString, long timeout) {
         try {
             Thread.sleep(timeout);
             String command =
@@ -24,12 +26,27 @@ public class BlockCypherClient implements BlockClient{
                     .map(String::trim)
                     .collect(Collectors.joining("\n"));
 
-            double balance = Long.parseLong(response.split(",")[2].trim().split(" ")[1].trim());
-            boolean sentZero = response.split(",")[1].trim().split(":")[1].trim().equalsIgnoreCase("0");
-            return new Address(addressString, balance, sentZero);
+            long balance = Long.parseLong(response.split(",")[2].trim().split(" ")[1].trim());
+//            boolean sentZero = response.split(",")[1].trim().split(":")[1].trim().equalsIgnoreCase("0");
+            return new AddressDto(addressString, (double) balance);
         } catch (Exception e) {
             // do nothing
         }
+        return null;
+    }
+
+    @Override
+    public Transaction callTransactionAPI(String transactionId, long timeout) {
+        return null;
+    }
+
+    @Override
+    public Block callBlockHeightAPI(int height, long timeout) {
+        return null;
+    }
+
+    @Override
+    public Block callBlockAPI(String blockHash, long timeout) {
         return null;
     }
 }

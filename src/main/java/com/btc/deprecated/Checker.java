@@ -2,7 +2,7 @@ package com.btc.deprecated;
 
 import com.btc.client.BlockClient;
 import com.btc.client.BlockchainClient;
-import com.btc.model.Address;
+import com.btc.model.AddressDto;
 import com.btc.utils.Utils;
 
 import java.io.BufferedReader;
@@ -44,12 +44,12 @@ public class Checker {
                 addressString = st.split(DELIMITER)[0];
                 System.out.print("Checking " + addressString);
                 try {
-                    Address address = blockClient.callAddressAPI(addressString, timeout);
-                    if (address != null && !address.isSentZero()) {
-                        problems++;
-                        System.out.print(" PROBLEM !!! ");
-                    }
-                    Double balance = address.getBalance();
+                    AddressDto address = blockClient.callAddressAPI(addressString, timeout);
+//                    if (address != null && !address.isSentZero()) {
+//                        problems++;
+//                        System.out.print(" PROBLEM !!! ");
+//                    }
+                    Double balance = (double) address.getBalance();
                     double a = Double.parseDouble(st.split(DELIMITER)[1]) * 100000000;
                     if ((Math.abs(Math.round(balance) - Math.round(a))) > 0) {
                         diffs++;

@@ -1,7 +1,11 @@
 package com.btc.database;
 
-import com.btc.model.Address;
+import com.btc.api.model.Block;
+import com.btc.api.model.PreviousOutput;
+import com.btc.api.model.TransactionOutput;
+import com.btc.model.AddressDto;
 import com.btc.model.Price;
+import com.btc.utils.Utils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -41,15 +45,13 @@ public class Query {
         return 0;
     }
 
-    public List<String> getAddressesWithLimitAndOffset(int limit, int offset) {
-        return getAddressesWithLimitAndOffsetSorted(limit, offset, "balance");
-    }
-
-    public List<String> getAddressesWithLimitAndOffsetSorted(int limit, int offset, String sortBy) {
+    public List<String> getAddressesWithLimitAndOffsetSorted(int limit, int offset, String sortBy, boolean zeroIncluded) {
         if (sortBy == null) {
-            sortBy = "balance";
+            sortBy = "balance DESC";
         }
-        String query = "select address,balance,received,meta,lastUpdate from address order by " + sortBy + " DESC limit " + limit + " OFFSET " + offset;
+        String zeroIncludedAsString = zeroIncluded ? " WHERE balance >= 0 " : " WHERE balance > 0 ";
+        String query = "select address, balance, received, meta, firstInput, lastOutput from address " + zeroIncludedAsString +
+                "order by " + sortBy + " limit " + limit + " OFFSET " + offset;
         List<String> list = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
@@ -57,22 +59,21 @@ public class Query {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 StringBuilder row = new StringBuilder();
-                for (int i = 1; i <= 5; i++) {
-                    if (i <= 1 || i == 4) {
+                for (int i = 1; i <= 6; i++) {
+                    if (i == 1 || i == 4) {
                         String string = rs.getString(i);
                         string = string != null ? string : "";
                         row.append(string);
                     }
                     if (i == 2 || i == 3) {
-                        Double d = rs.getDouble(i);
+                        Double d = rs.getDouble(i) / 100000000.0;
                         row.append(d);
                     }
-                    if (i == 5) {
-                        long l = rs.getLong(i);
-                        Date d = new Date(l);
-                        row.append(d);
+                    if (i == 5 || i == 6) {
+                        long timestamp = rs.getLong(i);
+                        row.append(timestamp > 0 ? Utils.longTimeStampToDateString(timestamp) : "");
                     }
-                    if (i < 5) {
+                    if (i < 6) {
                         row.append(",");
                     }
                 }
@@ -103,7 +104,7 @@ public class Query {
     }
 
     public List<String> getOldestAddresses(int nr) {
-        String query = "select address from address order by lastUpdate asc limit " + nr;
+        String query = "select address from address order by lastOutput asc limit " + nr;
         List<String> list = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
@@ -172,12 +173,12 @@ public class Query {
 
     }
 
-    public void insertAddress(Address address) {
+    public void insertAddress(AddressDto address) {
 
-        String sql = "insert into address (address, balance, received, lastUpdate, meta)"
+        String sql = "insert into address (address, balance, received, lastOutput, meta)"
                 + " values (?, ?, ?, ?, ?)";
         address.setMeta("");
-        address.setLastUpdate(System.currentTimeMillis());
+        address.setLastOutput(System.currentTimeMillis());
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
              PreparedStatement preparedStmt = preparedStatement(conn, sql, address)) {
@@ -188,9 +189,9 @@ public class Query {
         }
     }
 
-    public void updateAddress(Address address) {
+    public void updateAddress(AddressDto address) {
         String sql = "update address set balance = " + address.getBalance() + ", received = " + address.getReceived() +
-                ", lastUpdate = " + System.currentTimeMillis() +
+                ", lastOutput = " + System.currentTimeMillis() +
                 " where address = '" + address.getAddress() + "'";
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
@@ -202,7 +203,52 @@ public class Query {
         }
     }
 
-    public Integer addressExists(Address address) {
+    public void insertAddress(String address, double value, long time) {
+
+        String sql = "insert into address (address, balance, received, firstInput, lastInput, meta)"
+                + " values (?, ?, ?, ?, ?, ?)";
+        AddressDto address1 = new AddressDto(address, value);
+        address1.setMeta("");
+        address1.setFirstInput(time);
+        address1.setLastInput(time);
+        address1.setReceived(value);
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = preparedStatement(conn, sql, address1)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateAddressAdd(String address, long value, long time, long receiveValue) {
+        String sql = "update address set balance = balance + " + value + ", lastInput = " + time + ", received = received + " + receiveValue +
+                " where address = '" + address + "'";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = conn.prepareStatement(sql)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateAddressRemove(String address, long value, long time) {
+        String sql = "update address set balance = balance - " + value + ", lastOutput = " + time +
+                " where address = '" + address + "'";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = conn.prepareStatement(sql)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Integer addressExists(AddressDto address) {
         String sql = "select * from address where address = '" + address.getAddress() + "'";
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
@@ -216,6 +262,62 @@ public class Query {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    public Integer addressExists(String address) {
+        String sql = "select * from address where address = '" + address + "'";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = conn.prepareStatement(sql)) {
+            ResultSet rs = preparedStmt.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public void insertBlock(Block block) {
+
+        String sql = "insert into block (hash, height, prevBlock, nrTx)"
+                + " values (?, ?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = preparedStatementBlock(conn, sql, block)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertUtxo(TransactionOutput transactionOutput) {
+
+        String sql = "insert into utxo (address, txIndex, value, timestamp, spent)"
+                + " values (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = preparedStatementUtxo(conn, sql, transactionOutput)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateUtxoSpent(PreviousOutput previousOutput) {
+
+        String sql = "update utxo set spent = true where txIndex = " + previousOutput.getTransactionIndex() + " and address = '" + previousOutput.getAddress() + "'";
+        try (Connection conn = DriverManager.getConnection(connectionUrl, "root", "root");
+             PreparedStatement preparedStmt = conn.prepareStatement(sql)) {
+            preparedStmt.executeUpdate();
+        } catch (SQLException e) {
+            // handle the exception
+            System.out.println(e.getMessage());
+        }
     }
 
     public double noSpentLessThanBalanceSum(double v) {
@@ -235,13 +337,14 @@ public class Query {
         return 0;
     }
 
-    private PreparedStatement preparedStatement(Connection connection, String sql, Address address) throws SQLException {
+    private PreparedStatement preparedStatement(Connection connection, String sql, AddressDto address) throws SQLException {
         PreparedStatement preparedStmt = connection.prepareStatement(sql);
         preparedStmt.setString(1, address.getAddress());
         preparedStmt.setDouble(2, address.getBalance());
         preparedStmt.setDouble(3, address.getReceived());
-        preparedStmt.setLong(4, address.getLastUpdate());
-        preparedStmt.setString(5, address.getMeta());
+        preparedStmt.setLong(4, address.getFirstInput());
+        preparedStmt.setLong(5, address.getLastInput());
+        preparedStmt.setString(6, address.getMeta());
 
         return preparedStmt;
     }
@@ -257,4 +360,24 @@ public class Query {
 
         return preparedStmt;
     }
+
+    private PreparedStatement preparedStatementUtxo(Connection connection, String sql, TransactionOutput utxo) throws SQLException {
+        PreparedStatement preparedStmt = connection.prepareStatement(sql);
+        preparedStmt.setString(1, utxo.getAddress());
+        preparedStmt.setLong(2, utxo.getTransactionIndex());
+        preparedStmt.setLong(3, utxo.getValue());
+        preparedStmt.setLong(4, utxo.getTime());
+        preparedStmt.setInt(5, 0);
+        return preparedStmt;
+    }
+
+    private PreparedStatement preparedStatementBlock(Connection connection, String sql, Block block) throws SQLException {
+        PreparedStatement preparedStmt = connection.prepareStatement(sql);
+        preparedStmt.setString(1, block.getHash());
+        preparedStmt.setLong(2, block.getHeight());
+        preparedStmt.setString(3, block.getPrevBlock());
+        preparedStmt.setInt(4, block.getNrTx());
+        return preparedStmt;
+    }
+
 }

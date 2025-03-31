@@ -1,7 +1,7 @@
 package com.btc.deprecated;
 
 import com.btc.client.BlockCypherClient;
-import com.btc.model.Address;
+import com.btc.model.AddressDto;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,11 +38,11 @@ public class SentZero {
             }
             addressString = st;
             try {
-                Address address = blockCypherClient.callAddressAPI(addressString, timeout);
+                AddressDto address = blockCypherClient.callAddressAPI(addressString, timeout);
                 totalBalance += address.getBalance();
-                if (address.isSentZero()) {
-                    k++;
-                }
+//                if (address.isSentZero()) {
+//                    k++;
+//                }
                 System.out.println(address);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

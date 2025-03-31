@@ -1,15 +1,14 @@
-package com.btc;
+package com.btc.deprecated;
 
 import com.btc.client.BlockClient;
 import com.btc.client.BlockchainClient;
-import com.btc.model.Address;
+import com.btc.model.AddressDto;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import com.btc.processors.AddressProcessor;
 import com.btc.scraping.Fetcher;
-import com.btc.utils.Utils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,17 +47,13 @@ public class MainBitInfoCharts {
 
     private static void checkAddresses(String addressString) {
         try {
-            Address address = blockClient.callAddressAPI(addressString, timeout);
+            AddressDto address = blockClient.callAddressAPI(addressString, timeout);
             AddressProcessor addressProcessor = new AddressProcessor();
             if (address == null) {
                 System.out.println("SKIPPING " + addressString);
                 return;
             }
             addressProcessor.processAddress(address.getAddress());
-            if (address.isSentZero()) {
-                Double balance = address.getBalance();
-                System.out.println(addressString + "," + Utils.prettyBalance(balance));
-            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

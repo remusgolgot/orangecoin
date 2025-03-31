@@ -1,0 +1,4 @@
+1. Height 170
+    - first ever transaction
+2. Height 71036
+    - contains 3 unspendable outputs

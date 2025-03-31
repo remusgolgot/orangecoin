@@ -43,7 +43,7 @@ public class GenericDAO {
     }
 
     @Transactional
-    public <E> int count(Class<E> clazz) {
+    public <E> long count(Class<E> clazz) {
         return list(clazz).size();
     }
 

@@ -1,45 +1,67 @@
-1. INPUT/OUTPUT
+April backlog
+=============
 
-    A. DORMANCY : last interaction (diff to last input or output)
-    B. AGE : diff to first input
-    C. TOXICITY : diff to last output
-    D. UTXO : number of unspent transaction outputs
+1. Unit Tests
+    - AddressService
+        -> addressFull
+    - PriceService
+        -> priceStats
 
-2. PRICES API
-    * check and overwrite when populating (no duplications)
+2. Automated Tests
+    - Cover APIs
+
+3. Sync up to Block 210K (1st epoch)
+
+4. Logging
+==========================
+
+1. APIS
+    * replace long timestamps with String in the API responses (simple address, full address, other address APIs)
+    * define TOXICITY (score, some combination of number of utxos, size, age, number of utxos spent)
+
+/prices
     * fetch prices older than 2013-03-01
-    * indicators : DMAs
+    * check and overwrite when populating (no duplications)
+    * possibly use scraping, since public APIs are unreliable, and cannot handle (for free) dates way in the past
 
-3. Sort out remaining 35000 addresses (pull addresses from addresses.txt to the DB)
-
-4. Process incoming blocks
-
-5. Systems API
+/systems
+    * easier way to put win/loss (now we have to compare min/max to 0.00)
     * interval of changes
         -> e.g. : [-5,0,1,3,2,7,1,3]
         -> e.g. : [-4,null,-4,null,null,7]
-        -> this mode ignores all other inputs, besides from,to,target
+        -> this mode ignores all other inputs, besides: from,to,target
+    * combine calls/systems
+        -> e.g. 3 day losing streak AND [..]
 
-6. DCA Calculator
+/indicators
+    * DMA
+
+2. Export
+
+3. Process incoming blocks
+    - sync with current blocks
+
+4. DCA Calculator
              * from (mandatory)
              * to (optional, by default until present day)
-             * buyspan (in days)
-             * $ amount
-             * timespan (e.g. 1 year after, by default until present day)
+             * buyspan (daily / weekly / other time periodicity)
+             * $ amount per buy
+             * timespan (optional, e.g. 1 year after the last buy, by default until present day)
              * result
-                 + final amount
+                 + final amount invested
+                 + final value
                  + P/L
                  + ROI
 
-7. Automated tests
+5. Automated tests
     * run at each build
 
-8. Unit tests
+6. Unit tests
     + price controllers unit tests
     + address controllers unit tests
 
-9. Refactorings
+7. Refactorings
        * code cleanup, remove dead code, restructure code
        * safeguard APIs for correct data types (e.g. for dates only valid ones are allowed i.e. no exceptions are thrown)
 
-10. Logging
+8. Documentation

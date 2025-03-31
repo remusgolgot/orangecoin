@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "price")
 public class Price {
-    // date,price,market_cap,total_volume,variation
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

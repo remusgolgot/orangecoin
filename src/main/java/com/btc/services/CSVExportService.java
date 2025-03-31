@@ -10,16 +10,17 @@ import java.util.*;
 public class CSVExportService implements ExportService {
     @Override
     public void export(String path) {
-        String sortBy = "lastUpdate";
+        String sortBy = "balance DESC, address";
         try {
             FileWriter myWriter = new FileWriter(path + ".csv");
-            myWriter.append("id,address,balance,received,meta,lastUpdate");
+            myWriter.append("id,address,balance,received,meta,firstInput,lastOutput");
             myWriter.append("\n");
             Query query = new Query();
             int i = 0;
             int l = 0;
             while (true) {
-                List<String> list = query.getAddressesWithLimitAndOffsetSorted(100, 100 * i, sortBy);
+                System.out.println("exporting on offset ... " + (100 * i));
+                List<String> list = query.getAddressesWithLimitAndOffsetSorted(100, 100 * i, sortBy, false);
                 if (list.isEmpty()) {
                     break;
                 }
@@ -32,7 +33,7 @@ public class CSVExportService implements ExportService {
                 i++;
             }
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote to the main file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -74,9 +75,8 @@ public class CSVExportService implements ExportService {
                 myWriter.append("\n");
             }
 
-            System.out.println("here");
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote to the meta file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
