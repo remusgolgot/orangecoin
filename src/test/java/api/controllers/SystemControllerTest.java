@@ -34,7 +34,6 @@ public class SystemControllerTest {
         assertFalse(result.getStatus());
         assertEquals(0, result.getCount());
         assertNull(result.getData());
-        assertEquals(SYSTEM_SERVICE_NO_RESULT, result.getMessage());
     }
 
     @Test
@@ -60,7 +59,7 @@ public class SystemControllerTest {
         assertFalse(result.getStatus());
         assertEquals(0, result.getCount());
         assertNull(result.getData());
-        assertEquals(MIN_HIGHER_THAN_MAX, result.getError());
-        assertEquals(SYSTEM_SERVICE_NO_RESULT, result.getMessage());
+        assertEquals(MIN_HIGHER_THAN_MAX, result.getMessage());
+        assertEquals(SYSTEM_SERVICE_NO_RESULT, result.getError());
     }
 }

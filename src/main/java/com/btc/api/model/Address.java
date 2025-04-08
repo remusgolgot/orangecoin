@@ -38,4 +38,68 @@ public class Address {
 
     @Column(name = "firstInput")
     private Long firstInput;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public Double getReceived() {
+        return received;
+    }
+
+    public void setReceived(Double received) {
+        this.received = received;
+    }
+
+    public String getMeta() {
+        return meta;
+    }
+
+    public void setMeta(String meta) {
+        this.meta = meta;
+    }
+
+    public Long getLastOutput() {
+        return lastOutput;
+    }
+
+    public void setLastOutput(Long lastOutput) {
+        this.lastOutput = lastOutput;
+    }
+
+    public Long getLastInput() {
+        return lastInput;
+    }
+
+    public void setLastInput(Long lastInput) {
+        this.lastInput = lastInput;
+    }
+
+    public Long getFirstInput() {
+        return firstInput;
+    }
+
+    public void setFirstInput(Long firstInput) {
+        this.firstInput = firstInput;
+    }
 }

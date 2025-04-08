@@ -154,8 +154,9 @@ public class SystemService {
         for (int i = 0; i < pricesAtTarget.size(); i++) {
             Double priceAtCondition = pricesThatMatchConditions.get(i).getPrice();
             Double priceAtTarget = pricesAtTarget.get(i).getPrice();
-            System.out.println("priceAtCondition " + priceAtCondition);
-            System.out.println("priceAtTarget " + priceAtTarget);
+// LOG DEBUG
+//            System.out.println("priceAtCondition " + priceAtCondition);
+//            System.out.println("priceAtTarget " + priceAtTarget);
             if (priceAtTarget >= priceAtCondition) {
                 upOccurrences++;
                 overallUp += priceAtTarget - priceAtCondition;

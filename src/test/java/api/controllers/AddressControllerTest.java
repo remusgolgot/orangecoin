@@ -5,7 +5,6 @@ import com.btc.api.model.ResponseModel;
 import com.btc.api.services.AddressService;
 import com.btc.api.services.UtxoService;
 import com.btc.model.AddressDto;
-import com.btc.model.SummaryDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -212,33 +211,6 @@ public class AddressControllerTest {
         assertEquals(true, response.getStatus());
     }
 
-    @Test
-    public void addressControllerAddressSummary() {
 
-        when(addressService.getTotalAddresses()).thenReturn(1000L);
-        when(addressService.getAddressesNotEmpty()).thenReturn(500L);
-        when(addressService.getTotalBalanceSum()).thenReturn(100000000000.0);
-        when(addressService.getLowSpentAddressesSum()).thenReturn(55000000000.0);
-        when(addressService.getSpentZeroAddressesSum()).thenReturn(45000000000.0);
-        when(addressService.getMaxHeight()).thenReturn(100);
-
-        when(utxoService.count()).thenReturn(5000L);
-        when(utxoService.countUnspent()).thenReturn(3000L);
-
-        ResponseModel<SummaryDto> response = addressController.getSummary();
-        assertEquals(1, response.getCount());
-        assertEquals(true, response.getStatus());
-        assertEquals(1000L, response.getData().getTotalAddresses());
-        assertEquals(500L, response.getData().getNonEmptyAddresses());
-        assertEquals(1000.0, response.getData().getTotalBalance());
-        assertEquals(550.0, response.getData().getLowSpentBalance());
-        assertEquals(450.0, response.getData().getSpentZeroBalance());
-        assertEquals(100, response.getData().getMaxHeight());
-
-        assertEquals(5000L, response.getData().getNrUtxos());
-        assertEquals(3000L, response.getData().getNrUnspentUtxos());
-
-
-    }
 
 }

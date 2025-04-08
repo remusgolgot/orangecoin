@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.btc.api.messages.Responses.AMOUNT_IS_GREATER_THAN_MAX_SUPPLY;
+import static com.btc.api.messages.Responses.AMOUNT_IS_LOWER_THAN_ZERO;
 
 @Service
 public class AddressService implements Cloneable {
@@ -93,6 +94,9 @@ public class AddressService implements Cloneable {
     public List<AddressDto> getAddressesGreater(int amount) throws Exception {
         if (amount > 21000000) {
             throw new Exception(AMOUNT_IS_GREATER_THAN_MAX_SUPPLY);
+        }
+        if (amount < 0) {
+            throw new Exception(AMOUNT_IS_LOWER_THAN_ZERO);
         }
         long x = amount * 100000000L;
         List<Address> addressesGreater = addressDAO.getAddressesGreater(x);

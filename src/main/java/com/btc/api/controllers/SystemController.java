@@ -5,7 +5,6 @@ import com.btc.api.services.SystemService;
 import com.btc.model.SystemInput;
 import com.btc.model.SystemResult;
 import jakarta.validation.Valid;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,7 @@ import static com.btc.api.messages.Responses.SYSTEM_SERVICE_NO_RESULT;
 
 @RestController
 @RequestMapping("/api/systems")
-public class SystemController {
+public class SystemController extends BaseController {
 
     @Autowired
     SystemService systemService;
@@ -41,18 +40,9 @@ public class SystemController {
             SystemResult systemResult = systemService.getSystemResult(systemInput);
             return getResponseModel(systemResult);
         } catch (Exception e) {
-            ResponseModel<SystemResult> responseModel = getResponseModel(null);
-            responseModel.setError(e.getMessage());
+            ResponseModel<SystemResult> responseModel = getResponseModelError(SYSTEM_SERVICE_NO_RESULT);
+            responseModel.setMessage(e.getMessage());
             return responseModel;
         }
-    }
-
-    private static @NotNull <T> ResponseModel<T> getResponseModel(T entity) {
-        ResponseModel<T> response = new ResponseModel<>();
-        response.setData(entity);
-        response.setStatus(entity != null);
-        response.setCount(entity != null ? 1 : 0);
-        response.setMessage(entity == null ? SYSTEM_SERVICE_NO_RESULT : "");
-        return response;
     }
 }

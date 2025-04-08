@@ -2,10 +2,7 @@ package com.btc.api.controllers;
 
 import com.btc.api.model.ResponseModel;
 import com.btc.api.services.AddressService;
-import com.btc.api.services.UtxoService;
 import com.btc.model.AddressDto;
-import com.btc.model.SummaryDto;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,46 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/address") //
-public class AddressController {
+@RequestMapping("/api/address")
+public class AddressController extends BaseController {
 
     @Autowired
     AddressService addressService;
-
-    @Autowired
-    UtxoService utxoService;
-
-    /**
-     *
-     * @return summary information
-     */
-    @GetMapping(value = "/summary")
-    public ResponseModel<SummaryDto> getSummary() {
-
-        SummaryDto summaryDto = new SummaryDto();
-
-        long totalAddresses = addressService.getTotalAddresses();
-        long nrNonEmptyAddresses = addressService.getAddressesNotEmpty();
-        double totalBalance = addressService.getTotalBalanceSum();
-        double lowSpentAddressesSum = addressService.getLowSpentAddressesSum();
-        double spentZeroAddressesSum = addressService.getSpentZeroAddressesSum();
-        int maxHeight = addressService.getMaxHeight();
-        double unspendable = utxoService.getUnspendableBalanceSum();
-        long totalUtxoSum = utxoService.getTotal();
-
-        summaryDto.setTotalAddresses(totalAddresses);
-        summaryDto.setNonEmptyAddresses(nrNonEmptyAddresses);
-        summaryDto.setTotalBalance(totalBalance / 100000000.0);
-        summaryDto.setLowSpentBalance(lowSpentAddressesSum / 100000000.0);
-        summaryDto.setSpentZeroBalance(spentZeroAddressesSum / 100000000.0);
-        summaryDto.setUnspendable(unspendable / 100000000.0);
-
-        summaryDto.setNrUtxos(utxoService.count());
-        summaryDto.setNrUnspentUtxos(utxoService.countUnspent());
-        summaryDto.setUtxoTotal(totalUtxoSum);
-        summaryDto.setMaxHeight(maxHeight);
-        return getResponseModel(summaryDto);
-    }
 
     /**
      * @return number of addresses in the DB
@@ -137,28 +99,4 @@ public class AddressController {
         }
     }
 
-    private static @NotNull <T> ResponseModel<List<T>> getListResponseModel(List<T> list) {
-        ResponseModel<List<T>> response = new ResponseModel<>();
-        response.setData(list);
-        response.setStatus(list != null && !list.isEmpty());
-        response.setCount(list != null ? list.size() : 0);
-        response.setMessage(list == null || list.isEmpty() ? "No results" : "");
-        return response;
-    }
-
-    private static @NotNull <T> ResponseModel<T> getResponseModel(T entity) {
-        ResponseModel<T> response = new ResponseModel<>();
-        response.setData(entity);
-        response.setStatus(entity != null);
-        response.setCount(entity != null ? 1 : 0);
-        response.setMessage(entity == null ? "No result found" : "");
-        return response;
-    }
-
-
-    // disable for now
-//    @GetMapping(value = "/list")
-//    public List<Address> list() {
-//        return addressService.list();
-//    }
 }

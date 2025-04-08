@@ -1,18 +1,12 @@
 April backlog
 =============
 
-1. Unit Tests
-    - AddressService
-        -> addressFull
-    - PriceService
-        -> priceStats
-
-2. Automated Tests
+1. Automated Tests
     - Cover APIs
 
-3. Sync up to Block 210K (1st epoch)
+2. DCA
 
-4. Logging
+3. Logging
 ==========================
 
 1. APIS
@@ -23,6 +17,7 @@ April backlog
     * fetch prices older than 2013-03-01
     * check and overwrite when populating (no duplications)
     * possibly use scraping, since public APIs are unreliable, and cannot handle (for free) dates way in the past
+    * up to date (April 8th 2025)
 
 /systems
     * easier way to put win/loss (now we have to compare min/max to 0.00)
@@ -57,11 +52,14 @@ April backlog
     * run at each build
 
 6. Unit tests
-    + price controllers unit tests
-    + address controllers unit tests
 
 7. Refactorings
        * code cleanup, remove dead code, restructure code
        * safeguard APIs for correct data types (e.g. for dates only valid ones are allowed i.e. no exceptions are thrown)
 
-8. Documentation
+8. Performance
+    + all API calls take less than 1s
+    + indexes
+    + caching
+
+9. Documentation

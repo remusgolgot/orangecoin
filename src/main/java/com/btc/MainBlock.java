@@ -7,6 +7,7 @@ import com.btc.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class MainBlock {
 
@@ -15,12 +16,20 @@ public class MainBlock {
         final Query query = new Query();
 
         final BlockClient blockClient = new BlockchainClient();
-        long timeout = 2200;
+        long timeout = 100;
 
-        for (int i = 81400; i < 82000; i++) {
+        for (int i = 99000; i < 100000; i++) {
             System.out.println("processing block at height " + i);
             Block block = blockClient.callBlockHeightAPI(i, timeout);
-            query.insertBlock(block);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+
+            }
+            CompletableFuture.supplyAsync(() -> {
+                query.insertBlock(block);
+                return null;
+            });
             System.out.println("Found " + block.getTransactionList().size() + " transactions");
             int txNr = 0;
             for (Transaction transaction : block.getTransactionList()) {
@@ -32,7 +41,10 @@ public class MainBlock {
                     PreviousOutput previousOutput = transactionInput.getPreviousOutput();
                     if (previousOutput.getAddress() != null) {
                         inputAddresses.add(previousOutput.getAddress());
-                        query.updateUtxoSpent(previousOutput);
+                        CompletableFuture.supplyAsync(() -> {
+                            query.updateUtxoSpent(previousOutput); // here
+                            return null;
+                        });
                         query.updateAddressRemove(previousOutput.getAddress(), previousOutput.getValue(), transaction.getTime());
                     }
                 }

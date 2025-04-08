@@ -4,7 +4,6 @@ import com.btc.api.model.Price;
 import com.btc.api.model.ResponseModel;
 import com.btc.api.services.PriceService;
 import com.btc.model.PriceStats;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/price")
-public class PriceController {
+public class PriceController extends BaseController {
 
     @Autowired
     PriceService priceService;
@@ -55,12 +54,4 @@ public class PriceController {
         return getResponseModel(priceStats);
     }
 
-    private static @NotNull <T> ResponseModel<T> getResponseModel(T entity) {
-        ResponseModel<T> response = new ResponseModel<>();
-        response.setData(entity);
-        response.setStatus(entity != null);
-        response.setCount(entity != null ? 1 : 0);
-        response.setMessage(entity == null ? "No result found" : "");
-        return response;
-    }
 }

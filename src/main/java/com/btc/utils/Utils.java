@@ -44,8 +44,12 @@ public class Utils {
     public static AddressDto transformAddress(Address address1) {
         AddressDto address2 = new AddressDto();
         BeanUtils.copyProperties(address1, address2);
-        address2.setBalance(address2.getBalance() / 100000000.0);
-        address2.setReceived(address2.getReceived() / 100000000.0);
+        if (address2.getBalance() != null) {
+            address2.setBalance(address2.getBalance() / 100000000.0);
+        }
+        if (address2.getReceived() != null) {
+            address2.setReceived(address2.getReceived() / 100000000.0);
+        }
         return address2;
     }
 
