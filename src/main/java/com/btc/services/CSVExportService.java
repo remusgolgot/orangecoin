@@ -2,12 +2,16 @@ package com.btc.services;
 
 import com.btc.database.Query;
 import com.btc.model.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class CSVExportService implements ExportService {
+    Logger logger = LoggerFactory.getLogger(CSVExportService.class);
+
     @Override
     public void export(String path) {
         String sortBy = "balance DESC, address";
@@ -19,7 +23,7 @@ public class CSVExportService implements ExportService {
             int i = 0;
             int l = 0;
             while (true) {
-                System.out.println("exporting on offset ... " + (100 * i));
+                logger.info("exporting on offset ... " + (100 * i));
                 List<String> list = query.getAddressesWithLimitAndOffsetSorted(100, 100 * i, sortBy, false);
                 if (list.isEmpty()) {
                     break;
@@ -33,9 +37,9 @@ public class CSVExportService implements ExportService {
                 i++;
             }
             myWriter.close();
-            System.out.println("Successfully wrote to the main file.");
+            logger.info("Successfully wrote to the main file.");
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            logger.error("An error occurred.");
             e.printStackTrace();
         }
     }
@@ -76,9 +80,9 @@ public class CSVExportService implements ExportService {
             }
 
             myWriter.close();
-            System.out.println("Successfully wrote to the meta file.");
+            logger.info("Successfully wrote to the meta file.");
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            logger.error("An error occurred.");
             e.printStackTrace();
         }
     }

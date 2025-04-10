@@ -5,6 +5,8 @@ import com.btc.api.model.Block;
 import com.btc.api.model.Transaction;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BlockchainClient implements BlockClient {
+
+    Logger logger = LoggerFactory.getLogger(BlockchainClient.class);
 
     public AddressDto callAddressAPI(String addressString, long timeout) {
         String response = "";
@@ -71,7 +75,7 @@ public class BlockchainClient implements BlockClient {
             System.out.println(height + " " + blockHash);
             return callBlockAPI(blockHash, timeout);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
             // do nothing
         }
 
@@ -95,7 +99,7 @@ public class BlockchainClient implements BlockClient {
             ObjectMapper objectMapper = new ObjectMapper();
             block = objectMapper.readValue(response, new TypeReference<>() {});
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
             // do nothing
         }
 
@@ -104,7 +108,7 @@ public class BlockchainClient implements BlockClient {
     }
 
     public List<AddressDto> callGetBlockAPI(int from, int to, long timeout) {
-        List addresses = new ArrayList<AddressDto>();
+        List<AddressDto> addresses = new ArrayList<>();
         try {
             Thread.sleep(timeout);
             for (int i = from; i <= to; i++) {
@@ -123,15 +127,14 @@ public class BlockchainClient implements BlockClient {
                     System.out.println("Multiple transactions at height " + i);
                 } else {
                     String address = response.split("\"addr\":\"")[1].split("\"")[0].trim();
-                    String trim = response.split("\"time\":")[1].split(",")[0].trim();
+//                    String trim = response.split("\"time\":")[1].split(",")[0].trim();
 //                    long timestamp = Long.parseLong(trim);
 
                     addresses.add(new AddressDto(address, 0.0));
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            // do nothing
+            logger.error(e.getMessage());
         }
 
         return addresses;

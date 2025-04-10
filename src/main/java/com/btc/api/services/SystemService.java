@@ -5,6 +5,8 @@ import com.btc.model.Occurrence;
 import com.btc.model.SystemInput;
 import com.btc.model.SystemResult;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ public class SystemService {
 
     @Autowired
     protected PriceService priceService;
+
+    Logger logger = LoggerFactory.getLogger(SystemService.class);
 
     public SystemResult getSystemResult(SystemInput systemInput) throws Exception {
         List<Price> priceList = priceService.getFullList();
@@ -154,9 +158,6 @@ public class SystemService {
         for (int i = 0; i < pricesAtTarget.size(); i++) {
             Double priceAtCondition = pricesThatMatchConditions.get(i).getPrice();
             Double priceAtTarget = pricesAtTarget.get(i).getPrice();
-// LOG DEBUG
-//            System.out.println("priceAtCondition " + priceAtCondition);
-//            System.out.println("priceAtTarget " + priceAtTarget);
             if (priceAtTarget >= priceAtCondition) {
                 upOccurrences++;
                 overallUp += priceAtTarget - priceAtCondition;
@@ -181,7 +182,8 @@ public class SystemService {
 
         systemResult.setOverall(Math.round(overallUp + overallDown));
         systemResult.setRoi(roundTo2Decimals((overallROI / size - 1) * 100));
-        System.out.println("Finished system calculation");
+
+        logger.info("Finished system calculation");
         return systemResult;
     }
 

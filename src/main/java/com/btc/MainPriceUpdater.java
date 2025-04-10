@@ -2,11 +2,15 @@ package com.btc;
 
 import com.btc.database.Query;
 import com.btc.model.Price;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class MainPriceUpdater {
+
+    static Logger logger = LoggerFactory.getLogger(MainPriceUpdater.class);
 
     public static void main(String[] args) {
 
@@ -44,7 +48,7 @@ public class MainPriceUpdater {
 
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 }

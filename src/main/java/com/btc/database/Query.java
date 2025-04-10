@@ -6,6 +6,8 @@ import com.btc.api.model.TransactionOutput;
 import com.btc.model.AddressDto;
 import com.btc.model.Price;
 import com.btc.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.List;
 public class Query {
 
     private final String connectionUrl = "jdbc:mysql://localhost:3306/bitcoin?serverTimezone=UTC";
+
+    Logger logger = LoggerFactory.getLogger(Query.class);
 
     public void insertPrice(Price price) {
 
@@ -25,7 +29,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -41,6 +45,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
+            logger.error(e.getMessage());
         }
         return 0;
     }
@@ -81,7 +86,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return list;
     }
@@ -98,7 +103,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return list;
     }
@@ -115,7 +120,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return list;
 
@@ -133,7 +138,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return 0;
     }
@@ -150,7 +155,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return 0;
     }
@@ -167,7 +172,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return list;
 
@@ -185,7 +190,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -199,7 +204,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -218,7 +223,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -231,7 +236,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -244,7 +249,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -259,7 +264,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return null;
     }
@@ -275,7 +280,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return null;
     }
@@ -290,7 +295,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -304,7 +309,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -316,7 +321,7 @@ public class Query {
             preparedStmt.executeUpdate();
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -332,7 +337,7 @@ public class Query {
             }
         } catch (SQLException e) {
             // handle the exception
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return 0;
     }
