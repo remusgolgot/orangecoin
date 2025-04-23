@@ -18,7 +18,7 @@ public class MainBlock {
         final BlockClient blockClient = new BlockchainClient();
         long timeout = 100;
 
-        for (int i = 99000; i < 100000; i++) {
+        for (int i = 100900; i < 101200; i++) {
             System.out.println("processing block at height " + i);
             Block block = blockClient.callBlockHeightAPI(i, timeout);
             try {
